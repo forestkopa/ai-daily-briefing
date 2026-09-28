@@ -119,3 +119,8 @@
    （`~/.git-credentials` 只对本脚本读 PAT 有用，git 自己读不到）。
    → 保留「先试 `origin`、失败再走 URL 内联凭据」的双路径，并在日志里注明这是**预期现象**；
    同时给「两流全空的 exit 128」补上可读提示，不再是无字天书。
+10. **`latest` 与 Release 正文锚定 HEAD 会漂移**：打完 `v1.0` 之后又往 main 提了修复，
+    再跑一次 `-Version v1.0` 时脚本用 `HEAD` 落 latest、写正文，于是 `latest` 漂到 `3377d15`
+    而 `v1.0` 标签在 `9a6a0a7`——违反脚本自己开头的约定「latest 始终指向当前最大版本号对应的提交」。
+    → 标签已存在时改用 `git rev-list -n 1 <tag>` 取**标签自己的提交**，再拿它落 latest、
+    写 Release 正文与提交信息，保证 `vX.Y` / `latest` / Release 正文三者一致。

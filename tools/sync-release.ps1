@@ -13,7 +13,7 @@
 #   - vX.Y 标签 = 不可变里程碑（一次创建、永久保留），对应同名 GitHub Release。
 #   - GitHub 的 "Latest" 徽标由 GitHub 自动赋予「最新发布的 release」，无需手动管理。
 #
-# 本机实测踩过的六个坑（2026-09-28 修复，勿回退）：
+# 本机实测踩过的七个坑（2026-09-28 修复，勿回退）：
 #   1) 【致命】push 报 "git: 'remote-https' is not a git command"。
 #      本机 PortableGit 的 mingw64\libexec\git-core 是【空目录】，远程助手
 #      git-remote-https.exe 只存在于 mingw64\bin；而 git 是从 GIT_EXEC_PATH
@@ -47,6 +47,12 @@
 #         push 日志里那条「走 git 自带凭据失败」在本机是【预期现象】，不是故障。
 #      注：URL 里的 token 会短暂出现在本机进程命令行，属可接受残余风险；
 #         脚本已用 Sanitize 保证它不落日志，也不进 CI。
+#   7) 【逻辑】latest / Release 正文锚定 HEAD 会漂移。打完 vX.Y 之后又往 main 提了修复，
+#      下次再跑 -Version vX.Y 时，latest 与 Release 正文里的「基于提交」会指向新的 HEAD，
+#      与 vX.Y 标签自身提交不一致（实测 latest 漂到 3377d15，而 v1.0 在 9a6a0a7），
+#      违反本文件开头「latest 始终指向当前最大版本号对应的提交」这条约定。
+#      -> 标签已存在时用 `git rev-list -n 1 <tag>` 取【标签自己的提交】，
+#         再拿它去落 latest、写 Release 正文与提交信息。
 param(
     [string]$Version = '',  # 形如 v1.1；为空则只推送 main，不动版本号/latest
     [switch]$Force          # 跳过交互确认（仅当用户已明确批准推送后、由脚本/自动化显式传入）
@@ -251,34 +257,42 @@ try {
         if ($Version -notmatch '^v\d+\.\d+(\.\d+)?$') { throw "版本号格式应为 vX.Y（如 v1.1），收到: $Version" }
 
         # 3) 不可变版本标签（已存在则跳过，不覆盖历史里程碑）
+        #    【坑 7】latest 与 Release 正文必须锚定【版本标签自己的提交】，不能用 HEAD。
+        #    否则「打完 vX.Y 后又往 main 提了修复」再跑一次时，latest / Release 正文会漂到
+        #    与 vX.Y 标签不一致的提交上（实测 latest 漂到 3377d15，而 v1.0 在 9a6a0a7），
+        #    违反本文件开头「latest 始终指向当前最大版本号对应的提交」这条约定。
         $tagExists = (Invoke-Git tag -l $Version).Trim()
         if (-not $tagExists) {
             Invoke-Git tag $Version $sha
             Log "> git push origin refs/tags/$Version"
             Invoke-GitPush -Ref "refs/tags/$Version"
             Log "✅ 已打不可变标签 $Version ($sha)"
+            $verSha = $sha
         } else {
-            Log "⚠ 标签 $Version 已存在，跳过（不可变里程碑不被覆盖）"
+            $verSha = (Invoke-Git rev-list -n 1 $Version).Trim()
+            Log "⚠ 标签 $Version 已存在，跳过创建（不可变里程碑不被覆盖）"
+            Log "  锚定提交 $verSha（标签自身提交，非 HEAD $sha）"
         }
+        $verMsg = if ($verSha -eq $sha) { $msg } else { (Invoke-Git log -1 --pretty=%s $verSha).Trim() }
 
-        # 4) 移动 latest 标签到该提交（latest = 当前最大版本号）
-        Invoke-Git tag -f latest $sha
+        # 4) 移动 latest 标签到【该版本标签的提交】（latest = 当前最大版本号对应的提交）
+        Invoke-Git tag -f latest $verSha
         Log '> git push -f origin refs/tags/latest'
         Invoke-GitPush -Ref refs/tags/latest -Force
-        Log "✅ latest 标签已滚动到 $Version ($sha)；旧版本不再带 latest"
+        Log "✅ latest 标签已滚动到 $Version ($verSha)；旧版本不再带 latest"
 
-        # 5) 创建/更新该版本 Release
+        # 5) 创建/更新该版本 Release（正文锚定 $verSha，与标签保持一致）
         $verNotes = @"
 ## 版本 $Version
 
-- 基于提交：$sha
-- 提交信息：$msg
-- 变更明细：https://github.com/$repo/commits/$sha
+- 基于提交：$verSha
+- 提交信息：$verMsg
+- 变更明细：https://github.com/$repo/commits/$verSha
 
 ### 本版本主要更新
 > 请在本发布页补充相对上一版本的主要变更说明。
 
-> 本版本为不可变里程碑；latest 标签已自动滚动到本版本，GitHub 也会将本 release 标为 Latest。
+> 本版本为不可变里程碑（标签 $Version 恒定指向 $verSha）；latest 标签已滚动到本版本，GitHub 也会将本 release 标为 Latest。
 "@
         # 【坑 5，2026-09-28 实测，勿回退】
         #   PS 5.1 的 Invoke-RestMethod 在 -ContentType 不带 charset 时，
