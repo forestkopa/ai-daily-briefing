@@ -13,7 +13,7 @@
 #   - vX.Y 标签 = 不可变里程碑（一次创建、永久保留），对应同名 GitHub Release。
 #   - GitHub 的 "Latest" 徽标由 GitHub 自动赋予「最新发布的 release」，无需手动管理。
 #
-# 本机实测踩过的五个坑（2026-09-28 修复，勿回退）：
+# 本机实测踩过的六个坑（2026-09-28 修复，勿回退）：
 #   1) 【致命】push 报 "git: 'remote-https' is not a git command"。
 #      本机 PortableGit 的 mingw64\libexec\git-core 是【空目录】，远程助手
 #      git-remote-https.exe 只存在于 mingw64\bin；而 git 是从 GIT_EXEC_PATH
@@ -34,6 +34,19 @@
 #      而 PS 5.1 的 ConvertTo-Json 输出【字面中文】（不转 \uXXXX），必然踩中。
 #      -> ConvertTo-Json 后再手工转 UTF-8 字节数组传 -Body + 显式 charset=utf-8。
 #      详见主流程第 5 步的注释与实验矩阵。
+#   6) 【本机凭据助手全废 -> origin 形式的 push 必失败】。实测矩阵（2026-09-28）：
+#        credential.helper = manager + !"...\git-credential-manager.exe"
+#        GIT_TRACE=1 显示 git 走到 `run_command: 'git credential-manager get'` 后，
+#        整进程静默 exit 128，stdout/stderr 都是 0 字节；
+#        改用 -c credential.helper= 清空助手 -> 才报出真正原因
+#        "fatal: could not read Username for 'https://github.com': terminal prompts disabled"；
+#        而想换 credential.helper=store 也不行：mingw64\bin 下【根本没有
+#        git-credential-store.exe】（~/.git-credentials 只对本脚本读 PAT 有用，git 读不到）。
+#      => 本机唯一可行通路是【把凭据内联进 remote URL】绕过助手，这不是偷懒，是唯一解。
+#         所以下面 Invoke-GitPush 的「先试 origin、失败再走 URL」必须保留，
+#         push 日志里那条「走 git 自带凭据失败」在本机是【预期现象】，不是故障。
+#      注：URL 里的 token 会短暂出现在本机进程命令行，属可接受残余风险；
+#         脚本已用 Sanitize 保证它不落日志，也不进 CI。
 param(
     [string]$Version = '',  # 形如 v1.1；为空则只推送 main，不动版本号/latest
     [switch]$Force          # 跳过交互确认（仅当用户已明确批准推送后、由脚本/自动化显式传入）
@@ -148,7 +161,14 @@ function Invoke-Git {
         $stdout = if (Test-Path $tmpO) { [System.IO.File]::ReadAllText($tmpO) } else { '' }
         $stderr = if (Test-Path $tmpE) { [System.IO.File]::ReadAllText($tmpE) } else { '' }
         if ($rc -ne 0) {
-            throw (Sanitize ("git " + ($GitArgs -join ' ') + " 失败（exit $rc）: " + (Sanitize $stderr).Trim()))
+            $detail = (Sanitize $stderr).Trim()
+            if (-not $detail) { $detail = (Sanitize $stdout).Trim() }
+            if (-not $detail) {
+                # 坑 6：本机凭据助手不可用时，git 尝试调 helper 会【静默 exit 128，
+                # 且 stdout/stderr 一个字都不输出】，报错信息空着会让人无从下手。
+                $detail = '（无任何输出；多为凭据助手不可用所致 —— 见文件头坑 6）'
+            }
+            throw (Sanitize ("git " + ($GitArgs -join ' ') + " 失败（exit $rc）: $detail"))
         }
         return $stdout
     } finally {
@@ -174,7 +194,7 @@ function Invoke-GitPush {
         if (-not $script:Pat) { throw (Sanitize "git push origin $Ref 失败且无可用的 PAT 兜底：$firstErr") }
         # 记下首次失败原因：本机 credential.helper 走不通是常态（见文件头说明），
         # 但万一以后是别的原因（网络/权限），这里能直接看出来。
-        Log "  push 走 git 自带凭据失败（$firstErr），改用 PAT 兜底 URL"
+        Log "  push 走 git 自带凭据失败（$firstErr）；本机凭据助手不可用属预期现象（见文件头坑 6），改用 PAT 兜底 URL"
         $url = "https://$($script:Pat.Trim())@github.com/$repo.git"
         $fb = @('push')
         if ($Force) { $fb += '-f' }

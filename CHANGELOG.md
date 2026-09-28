@@ -111,3 +111,11 @@
    → `"???? ABC"`；UTF-8 字节 body → `22 e4 b8 ad e6 96 87` → `"中文测试 ABC"`。
    → 改为 `ConvertTo-Json` 后取 `[Text.Encoding]::UTF8.GetBytes()` 传 `-Body`，并显式 `charset=utf-8`。
    > 曾误把这条归因于「git 输出编码乱码顺着写进正文」——那是另一条独立的坑（提交信息乱码），两处都要修。
+9. **本机两种凭据助手全不可用 → `origin` 形式的 push 必然失败**：`credential.helper` 配的是
+   GCM（`git-credential-manager.exe` 存在），但 `GIT_TRACE=1` 显示 git 走到
+   `run_command: 'git credential-manager get'` 后**静默 exit 128，两个流都是 0 字节**；
+   用 `-c credential.helper=` 清空助手才露出真因（`could not read Username ... terminal prompts disabled`）；
+   想换 `store` 也不行——`mingw64\bin` 下**根本没有 `git-credential-store.exe`**
+   （`~/.git-credentials` 只对本脚本读 PAT 有用，git 自己读不到）。
+   → 保留「先试 `origin`、失败再走 URL 内联凭据」的双路径，并在日志里注明这是**预期现象**；
+   同时给「两流全空的 exit 128」补上可读提示，不再是无字天书。
