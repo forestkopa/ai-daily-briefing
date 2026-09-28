@@ -68,6 +68,19 @@
 | `gen_preflight.py` / `gen_add_ingress.py` | 生成服务器自检脚本 / ingress 配置片段 |
 | `clean_tmp.py` | 清理验证临时目录 |
 
+### 发布流水线（`tools/sync-release.ps1`）
+照 project-kanban 的套路做一个本地发版脚本，一次跑完「push main → 打不可变标签 `vX.Y` →
+滚动 `latest` 指针 → 创建/更新同名 Release」：
+
+- **`vX.Y` 不可变里程碑**（一次创建、永久保留）+ **`latest` 移动指针**（永远指向当前最大版本号）。
+  发布更高版本时 `latest` 给到新提交，旧版本自动不再带 `latest`；GitHub 的 Latest 徽标由平台自动赋予。
+- **推送确认门禁**：默认交互要输入 `YES` 才推；`-Force` 只在用户已明确批准时由脚本/自动化传入
+  （沿用「每日推送须经用户同意」的约定）。
+- **鉴权不落盘**：优先用 `$env:GH_PAT`，缺省时自动读 `~/.git-credentials`；
+  push 优先走 git 自带凭据，失败才用 PAT 拼 URL 兜底，且所有输出先过 `Sanitize` 抹掉 token。
+- 脚本内固化 5 个本机实测坑（见文件头注释），其中 3 个是发布流水线专属：
+  `GIT_EXEC_PATH` 必须注入、token 不得进日志、`Invoke-RestMethod` 必须传 UTF-8 字节。
+
 ### 两个本机特有的坑（已固化进代码）
 - **safe-delete 钩子会拦截 `os.remove` / `shutil.rmtree`** —— 删除必须用 ctypes 直调
   `SHFileOperationW`，见 `clean_cache.py` 的 `permanent_delete()`。
@@ -86,3 +99,15 @@
 5. **包内 `ai-briefing-update.exe` 是旧版**：时间戳比 `build.py` 旧 3 天，内嵌旧 UI，
    走 exe 备用路线会拿到旧界面 → 重打包并**实跑验证**产物。
    > `grep` 二进制找源码字符串**无效**（PyInstaller 压缩内嵌），唯一硬验证是实跑看产物。
+6. **`sync-release.ps1` push 报 `git: 'remote-https' is not a git command`**：本机 PortableGit 的
+   `mingw64\libexec\git-core` 是**空目录**，远程助手只存在于 `mingw64\bin`，而 git 只从
+   `GIT_EXEC_PATH` 找远程助手。实测矩阵：加 PATH **无效**（rc=128）、设 `GIT_EXEC_PATH` **有效**（rc=0）。
+7. **PAT 泄露进 `logs/_sync.log`**：兜底 URL 里的 token 随错误信息被写进日志 → 新增 `Sanitize()`，
+   所有输出先抹 token，并立即清理已泄露的日志。
+8. **Release 正文中文变 `?`**（P0，发布后才被 GitHub 侧原始字节复核抓到）：PS 5.1 的
+   `Invoke-RestMethod` 在 `-ContentType` 不带 `charset` 时把**字符串** body 按 ISO-8859-1 编码，
+   而 PS 5.1 的 `ConvertTo-Json` 输出的是**字面中文**（不做 `\uXXXX` 转义），两件事叠一起必然踩中。
+   实验矩阵（本机 PSVersion 5.1.19041.7725 / Default enc gb2312）：字符串 body → `22 3f 3f 3f 3f 20`
+   → `"???? ABC"`；UTF-8 字节 body → `22 e4 b8 ad e6 96 87` → `"中文测试 ABC"`。
+   → 改为 `ConvertTo-Json` 后取 `[Text.Encoding]::UTF8.GetBytes()` 传 `-Body`，并显式 `charset=utf-8`。
+   > 曾误把这条归因于「git 输出编码乱码顺着写进正文」——那是另一条独立的坑（提交信息乱码），两处都要修。
