@@ -1,0 +1,46 @@
+# ============================================================
+# AI 日报看板 .gitignore
+# 原则：只入库「源码 + 文档 + 可复现的工具脚本」。
+#       生成产物、二进制、运行时临时文件一律排除。
+# ============================================================
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.venv/
+
+# ---- 抓取/生成的产物（每次运行都会重建，不入库）----
+data/today.json
+data/*.html
+dist_package/
+
+# ---- 布局审计结果（机器输出，可用 tools/shoot_cdp.py 重跑）----
+preview/审计-*.json
+
+# ---- PyInstaller 中间产物与打包输出（约 20 MB）----
+deploy/build/
+deploy/dist/
+
+# ---- 二进制（体积大；服务器侧由部署包携带，勿入库）----
+deploy/nssm.exe
+tools/nssm-2.24/
+tools/cloudflared/
+
+# ---- 本地验证/构建临时目录 ----
+.shot-tmp/
+.backup/
+.dot-tmp/
+
+# ---- 运行时日志 ----
+logs/
+*.log
+
+# ---- WorkBuddy 本地会话数据（非项目内容）----
+.workbuddy/
+
+# ---- 通用临时文件 ----
+*.tmp
+*.bak
+~$*

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 日报 · 2026-09-21</title>
+<script>document.documentElement.classList.add('js-ready');</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-primary:#FFF9F2;
+  --bg-card:#FFFFFF;
+  --bg-elevated:#FFF4E6;
+  --text-primary:#1A1A1A;
+  --text-secondary:#5C5C5C;
+  --text-muted:#8A8A8A;
+  --accent:#FF6B35;
+  --accent-hover:#E85525;
+  --accent-light:#FFE4D6;
+  --gold:#F7B801;
+  --gradient:linear-gradient(135deg,#FF6B35 0%,#F7B801 100%);
+  --gradient-soft:linear-gradient(135deg,#FFE4D6 0%,#FFF4D6 100%);
+  --border:#F0E4D4;
+  --border-hover:#FFB89A;
+  --radius:14px;
+  --radius-sm:8px;
+  --radius-lg:20px;
+  --shadow:0 4px 20px rgba(255,107,53,0.08);
+  --shadow-hover:0 8px 28px rgba(255,107,53,0.16);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","PingFang SC","Microsoft YaHei",sans-serif;
+  --font-mono:"SF Mono","Fira Code",Menlo,Consolas,monospace;
+  --transition:0.25s cubic-bezier(0.4,0,0.2,1);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:var(--bg-primary);
+  color:var(--text-primary);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+
+/* Sticky Nav */
+.topnav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,249,242,0.92);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.topnav-inner{
+  max-width:1100px;margin:0 auto;
+  padding:14px 24px;
+  display:flex;align-items:center;gap:24px;
+  overflow-x:auto;
+}
+.topnav-brand{
+  font-weight:700;font-size:0.95rem;
+  display:flex;align-items:center;gap:8px;
+  white-space:nowrap;
+}
+.topnav-brand .dot{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--gradient);
+  box-shadow:0 0 0 3px var(--accent-light);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 3px var(--accent-light)}
+  50%{box-shadow:0 0 0 6px rgba(255,107,53,0.15)}
+}
+.topnav-links{display:flex;gap:6px;flex:1}
+.topnav-links button{
+  appearance:none;border:0;background:transparent;font:inherit;cursor:pointer;
+  font-size:0.85rem;color:var(--text-secondary);
+  padding:6px 12px;border-radius:999px;
+  white-space:nowrap;
+  transition:var(--transition);
+}
+.topnav-links button:hover,.topnav-links button.active{background:var(--accent-light);color:var(--accent)}
+
+/* Hero */
+.hero{
+  padding:80px 24px 60px;
+  text-align:center;
+  background:var(--gradient-soft);
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:"";position:absolute;top:-100px;right:-100px;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,107,53,0.15) 0%,transparent 70%);
+}
+.hero::after{
+  content:"";position:absolute;bottom:-80px;left:-80px;
+  width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(circle,rgba(247,184,1,0.18) 0%,transparent 70%);
+}
+.hero-inner{max-width:900px;margin:0 auto;position:relative;z-index:1}
+.date-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;border-radius:999px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  font-size:0.85rem;color:var(--text-secondary);
+  margin-bottom:20px;
+  box-shadow:var(--shadow);
+}
+.date-badge .live{
+  width:8px;height:8px;border-radius:50%;
+  background:#22C55E;
+  animation:live-pulse 1.6s ease-out infinite;
+}
+@keyframes live-pulse{
+  0%{box-shadow:0 0 0 0 rgba(34,197,94,0.5)}
+  100%{box-shadow:0 0 0 10px rgba(34,197,94,0)}
+}
+.hero h1{
+  font-size:clamp(2.2rem,5.5vw,3.6rem);
+  font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:14px;
+}
+.hero h1 .accent{
+  background:var(--gradient);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-tagline{
+  font-size:clamp(1rem,1.6vw,1.15rem);
+  color:var(--text-secondary);margin-bottom:40px;
+}
+.hero-stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:14px;max-width:760px;margin:0 auto;
+}
+.stat-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px 14px;text-align:center;
+  box-shadow:var(--shadow);transition:var(--transition);
+}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:var(--border-hover)}
+.stat-num{
+  font-size:2.2rem;font-weight:800;font-family:var(--font-mono);
+  background:var(--gradient);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;
+}
+.stat-label{font-size:0.78rem;color:var(--text-muted);margin-top:6px;letter-spacing:0.5px}
+
+/* Section */
+.section{padding:60px 24px 20px;scroll-margin-top:64px}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-head{
+  display:flex;align-items:baseline;gap:14px;
+  margin-bottom:28px;padding-bottom:14px;
+  border-bottom:2px dashed var(--border);
+}
+.section-head .icon{
+  width:34px;height:34px;border-radius:10px;background:var(--gradient);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;
+}
+.section-head .icon svg{width:18px;height:18px}
+.section-head h2{font-size:1.5rem;font-weight:700;letter-spacing:-0.3px}
+.section-head .count{
+  font-size:0.8rem;margin-left:auto;font-family:var(--font-mono);
+  background:var(--accent-light);color:var(--accent);
+  padding:3px 10px;border-radius:999px;align-self:center;
+}
+
+/* Cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px 22px;
+  display:flex;flex-direction:column;position:relative;overflow:hidden;
+  transition:var(--transition);
+}
+html.js-ready .card{opacity:0;transform:translateY(16px)}
+html.js-ready .card.visible,.card.visible{opacity:1;transform:none}
+.card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--gradient);transform:scaleX(0);transform-origin:left;
+  transition:transform 0.3s ease;
+}
+.card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-hover);transform:translateY(-3px)}
+.card:hover::before{transform:scaleX(1)}
+.card-num{
+  position:absolute;top:14px;right:18px;
+  font-family:var(--font-mono);font-size:0.78rem;color:var(--text-muted);
+  background:var(--bg-elevated);padding:2px 8px;border-radius:6px;
+}
+.card-title{font-size:1.02rem;font-weight:600;line-height:1.45;margin-bottom:12px;padding-right:48px;letter-spacing:-0.2px}
+.card-source{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:0.75rem;color:var(--text-muted);margin-bottom:10px;
+  padding:3px 10px;background:var(--bg-elevated);border-radius:999px;
+  align-self:flex-start;max-width:100%;
+}
+.card-source svg{width:11px;height:11px;flex-shrink:0;opacity:0.6}
+.card-source span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-summary{font-size:0.88rem;color:var(--text-secondary);line-height:1.6;margin-bottom:14px;flex:1}
+.card-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:0.82rem;font-weight:500;color:var(--accent);
+  margin-top:auto;align-self:flex-start;transition:var(--transition);
+}
+.card-link svg{width:14px;height:14px;transition:transform 0.2s ease}
+.card-link:hover{color:var(--accent-hover)}
+.card-link:hover svg{transform:translate(2px,-2px)}
+
+/* Footer */
+footer{
+  margin-top:60px;padding:40px 24px;text-align:center;
+  border-top:1px solid var(--border);background:var(--bg-elevated);
+}
+.footer-stats{
+  display:inline-flex;align-items:center;gap:16px;
+  font-size:0.85rem;color:var(--text-secondary);
+  flex-wrap:wrap;justify-content:center;
+}
+.footer-stats .sep{color:var(--text-muted)}
+.footer-source{font-size:0.78rem;color:var(--text-muted);margin-top:8px}
+.footer-source a{color:var(--accent);font-weight:500}
+.to-top{
+  position:fixed;right:24px;bottom:24px;z-index:60;
+  width:42px;height:42px;border-radius:50%;border:1px solid var(--border);
+  background:var(--bg-card);color:var(--accent);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow);transition:var(--transition);
+  opacity:0;pointer-events:none;
+}
+.to-top.show{opacity:1;pointer-events:auto}
+.to-top:hover{background:var(--accent-light);border-color:var(--border-hover);transform:translateY(-2px)}
+
+/* Responsive */
+@media (max-width:768px){
+  .hero{padding:60px 20px 50px}
+  .section{padding:48px 20px 14px}
+  .cards{grid-template-columns:1fr;gap:14px}
+  .card{padding:18px}
+  .topnav-inner{padding:12px 16px;gap:14px}
+  .section-head{flex-wrap:wrap;gap:10px}
+  .section-head .count{margin-left:0}
+  .to-top{right:16px;bottom:16px}
+}
+@media print{
+  .topnav,.to-top{display:none}
+  .card{break-inside:avoid;opacity:1!important;transform:none!important}
+  html.js-ready .card{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav" aria-label="板块导航">
+  <div class="topnav-inner">
+    <div class="topnav-brand"><span class="dot"></span>AI HOT · 日报</div>
+    <div class="topnav-links">
+      <button type="button" data-target="sec-model">模型发布</button>
+      <button type="button" data-target="sec-product">产品发布</button>
+      <button type="button" data-target="sec-industry">行业动态</button>
+      <button type="button" data-target="sec-paper">论文研究</button>
+      <button type="button" data-target="sec-tips">技巧与观点</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="date-badge"><span class="live"></span>2026-09-21 · 周一 · 北京时间</div>
+    <h1>今日 <span class="accent">AI</span> 圈发生了什么</h1>
+    <p class="hero-tagline">来自 OpenAI、Anthropic、Google、阿里千问、阶跃星辰、智谱、宇树等 30+ 信息源的精选合辑</p>
+    <div class="hero-stats">
+      <div class="stat-card"><div class="stat-num" data-target="30">0</div><div class="stat-label">今日条数</div></div>
+      <div class="stat-card"><div class="stat-num" data-target="5">0</div><div class="stat-label">分类板块</div></div>
+      <div class="stat-card"><div class="stat-num" data-target="30">0</div><div class="stat-label">收录信源</div></div>
+      <div class="stat-card"><div class="stat-num">8:00</div><div class="stat-label">每日更新</div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="section" id="sec-model">
+<div class="section-inner">
+  <div class="section-head">
+    <span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></span>
+    <h2>模型发布 / 更新</h2>
+    <span class="count">6 条</span>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <span class="card-num">01</span>
+      <h3 class="card-title">阶跃星辰发布 Step 5 Preview：600B MoE，成本仅 Opus 5 的 1/8</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>阶跃星辰 · 官方发布</span></span>
+      <p class="card-summary">阶跃推出新一代旗舰基座模型 Step 5 Preview，采用稀疏 MoE 架构，总参数 600B、单 Token 激活仅 27B，支持 100 万 Token 上下文与文本、视觉双输入。在 Artificial Analysis 智能指数拿到 44 分，位列全球开源模型前三，单任务成本约为 Claude Opus 5 的八分之一。长周期任务实测中，它用约 22 小时把 MLA 内核峰值性能优化到 508 TFLOPS，超过 Opus 5 的 493 TFLOPS。API 已开放，官方计划 10 月 15 日释放模型权重。</p>
+      <a class="card-link" href="https://www.sohu.com/a/1078730115_455313" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">02</span>
+      <h3 class="card-title">阿里开源 Qwen-Image-2.1：7B 模型原生支持透明图像</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>Qwen · 开源发布</span></span>
+      <p class="card-summary">阿里把文生图与图像编辑统一进同一个模型，视觉生成部分为 32 层 Single-Stream DiT、仅 7B 参数，并原生支持 2K 与 RGBA 透明图像的生成与编辑。采用混合粒度注意力与 KV Cache 复用，文本走 Token 级因果掩码、图像走 Chunk 级掩码，多图输入下推理效率与显存占用明显改善。编辑支持最多 10 张参考图，可用圈选、涂抹或独立掩码指定区域，首日即支持 ComfyUI 与 Diffusers。</p>
+      <a class="card-link" href="https://agihunt.info/en/daily/2026-09-21" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">03</span>
+      <h3 class="card-title">宇树开源 UnifoLM-WLA-1.0：6B 具身大脑拿下 7 项开源 SOTA</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>宇树科技 · 开源发布</span></span>
+      <p class="card-summary">单模型覆盖 64 项操作任务（10 项全身 + 54 项桌面），先用世界模型预测环境动态区域、再生成可执行动作策略。具身推理底座 UnifoLM-ER-1-4B 基于 Qwen3-VL-4B 训练，在 16 项多模态基准中 7 项领先参评开源模型，Where2Place 拿到 82.0 分（GPT-6 Astra 为 69.0）、EmbSpatial 88.9 分。官方称将开放模型、代码与数据集。</p>
+      <a class="card-link" href="https://business.china.com.cn/2026-09/21/content_43495019.shtml" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">04</span>
+      <h3 class="card-title">智谱 GLM-5.3-Flash 部署超 10 万张国产芯片，同步完成约 50 亿美元融资</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>Z.ai · 官方动态</span></span>
+      <p class="card-summary">GLM-5.3-Flash（320B 总参数 / 18B 激活 / 1M 上下文）已在超过 10 万张国产加速卡上部署，两周内吞吐量提升三倍，官方称单 Token 成本已与主流英伟达 GPU 持平。融资方面，智谱于 9 月 16 日敲定约 50 亿美元融资，其中 60% 将投向下一代 GLM 模型与基础设施建设。</p>
+      <a class="card-link" href="https://www.unrot.co/blogs/ai-news-this-week-september-20-2026" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">05</span>
+      <h3 class="card-title">谷歌、Anthropic、OpenAI 同日发布网络安全专用模型</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>The Hacker News</span></span>
+      <p class="card-summary">三家前沿实验室 9 月 20 日同日出手：Google 通过 Fairwind 计划向 650 余家安全伙伴开放 Gemini 3.8 Flash Cyber（含 CrowdStrike、Palo Alto Networks、Snowflake）；Anthropic 放开 Claude Fable 5.1 的网络安全用途并推出 Enterprise Frontier Safeguards 治理产品；OpenAI 公布即将发布的 Astra 达到自家 Preparedness Framework 的 Critical 网络安全能力阈值——这是部署限制生效前的最高一级。</p>
+      <a class="card-link" href="https://davidandgoliath.ai/daily-ai-briefing/frontier-labs-cyber-ai-models-enterprise-security-2026" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">06</span>
+      <h3 class="card-title">前沿模型转向「先灰测后官宣」：Anthropic 暗中把 Opus 5.2 接入生产</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>钛媒体</span></span>
+      <p class="card-summary">开发者发现 Anthropic 未经官宣即将 Opus 5.2 接入生产环境，谷歌则以旧版本号在盲测平台上灰测下一代旗舰。传统「内部测试—正式发布」的流程正在被真实负载灰测取代，模型上线节奏与对外官宣开始脱钩，这也让版本管理和能力评估变得更难追踪。</p>
+      <a class="card-link" href="https://agihunt.info/en/daily/2026-09-21" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+  </div>
+</div>
+</section>
+
+<section class="section" id="sec-product">
+<div class="section-inner">
+  <div class="section-head">
+    <span class="icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" fill="none" stroke="#fff" stroke-width="2"/></svg></span>
+    <h2>产品发布 / 更新</h2>
+    <span class="count">8 条</span>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <span class="card-num">07</span>
+      <h3 class="card-title">通义发布首个面向智能体的多模态模型 Qwen3.8-Omni-Flash</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>The Decoder</span></span>
+      <p class="card-summary">支持音视频联合理解，可自主调用工具完成剪辑、翻译、总结等连续任务。多模态基准对标 Gemini Flash，但定价更低。定位明确指向「智能体底座」而非单轮对话，意味着视频理解与工具编排被放进同一个模型内解决。</p>
+      <a class="card-link" href="https://agihunt.info/en/daily/2026-09-21" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">08</span>
+      <h3 class="card-title">百度搭子升级企业版：移动端 + 智能体开发平台同步上线</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>上海证券报</span></span>
+      <p class="card-summary">百度搭子升级企业版多人协作能力，同时发布企业版移动端与智能体开发平台，并启动生态共创计划。字节 CEO 梁汝波此前也表态豆包、飞书与火山引擎整合后将加大企业市场投入——国内厂商在企业 Agent 平台的竞争明显提速。</p>
+      <a class="card-link" href="https://weibo.com/7905315703/5345505602700035" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">09</span>
+      <h3 class="card-title">GPT-Live-1 开放 API：ChatGPT 同款实时双工语音，每分钟 0.05 美元</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>每日 AIGC 早报</span></span>
+      <p class="card-summary">ChatGPT 上使用的实时双工语音模型 GPT-Live-1 正式开放 API，定价每分钟 0.05 美元。双工意味着模型可以边听边说、支持打断，这是语音交互从「轮流说话」走向自然对话的关键一步，而低价位让它具备规模化接入客服、陪伴类产品的可能。</p>
+      <a class="card-link" href="https://new.qq.com/rain/a/20260920A051C000" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">10</span>
+      <h3 class="card-title">谷歌发布《Agentic Engineering》五段法指南</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>Google · AGI Hunt 援引</span></span>
+      <p class="card-summary">12 页指南提出智能体工程的五个步骤：规范、脚手架、轨迹、验证、元调试。核心主张是智能体在正式采纳前必须跑完整轨迹做验证——这与 DoorDash 用多智能体清理技术债的实证结论互相印证：落地关键不在生成，而在验收环节。</p>
+      <a class="card-link" href="https://agihunt.info/en/daily/2026-09-21" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">11</span>
+      <h3 class="card-title">DoorDash 多智能体批量清理技术债：623 仓库、6 万余特性开关</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>InfoQ</span></span>
+      <p class="card-summary">多智能体工作流清查了 623 个代码仓库、6 万余个特性开关，抽样 50 项中 45 项产出可用 PR（通过率 90%），平均耗时不足 14 分钟，且全程保留工程师审批在环。这是目前少见的、把「Agent 产出可合并代码」这件事量化到 PR 通过率级别的公开案例。</p>
+      <a class="card-link" href="https://agihunt.info/en/daily/2026-09-21" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">12</span>
+      <h3 class="card-title">Pirate Face：用 P2P 种子保护开源模型不被下架</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>GeekNews</span></span>
+      <p class="card-summary">这项服务把 Hugging Face 上的开源模型镜像成带校验和的 torrent，靠 P2P 网络让模型持续存活，而不是依赖某一家公司。torrent 内置 Hugging Face 的 web seed，即使没有其他节点也能下载——设计目标很直接：即使原仓库被删除，模型访问权也不会消失。</p>
+      <a class="card-link" href="https://claude-news.today/en/briefings/briefing-2026-09-21" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">13</span>
+      <h3 class="card-title">OpenAI 上线 Astra for Law，专门面向法律场景</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>每日 AIGC 早报</span></span>
+      <p class="card-summary">专门面向法律工作流的 Astra 版本，标志前沿模型开始按行业垂类拆分发版。官方配套给出的用法要点是：先赋身份（「你现在是严谨的法务助理，只依据我提供的文本回答」）、只摘重点并要求标注原文位置、关键数字与承诺一律回原文核对——反幻觉被写进了产品说明。</p>
+      <a class="card-link" href="https://new.qq.com/rain/a/20260920A051C000" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">14</span>
+      <h3 class="card-title">蚂蚁灵波开源 LingBot-World 2.0 世界模型系列</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>蚂蚁集团</span></span>
+      <p class="card-summary">一次开源三款 LingBot-World 2.0 世界模型，其中 Small 版本参数量降至可端侧部署的区间。世界模型被视为具身智能与长时序规划的基础设施，蚂蚁在开源侧连续加码，与同期的产业投资动作形成配合。</p>
+      <a class="card-link" href="https://new.qq.com/rain/a/20260920A051C000" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+  </div>
+</div>
+</section>
+
+<section class="section" id="sec-industry">
+<div class="section-inner">
+  <div class="section-head">
+    <span class="icon"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M21 7v6h-6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <h2>行业动态</h2>
+    <span class="count">6 条</span>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <span class="card-num">15</span>
+      <h3 class="card-title">四大实验室被诉「联手让 AI 变慢」，反垄断案持续蔓延</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>AP · 加州北区联邦法院</span></span>
+      <p class="card-summary">四名原告在加州北区联邦法院起诉 Anthropic、OpenAI、xAI 与谷歌（案号 3:26-cv-10693），指控它们公开协调、人为放慢 AI 发展速度，涉嫌垄断合谋。导火索是 Anthropic CEO 本月呼吁全行业「控速」并获马斯克、奥特曼等公开附和。同期 Anthropic 选定埃森哲为首家「嵌入式评估方」，双方各承诺五年投入超 10 亿美元。</p>
+      <a class="card-link" href="https://www.unrot.co/blogs/ai-news-this-week-september-20-2026" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">16</span>
+      <h3 class="card-title">Terence Tao 说该减速，黄仁勋说「我们要能多快就多快」</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>AGI Hunt</span></span>
+      <p class="card-summary">陶哲轩在视频中公开表示「我们必须放慢 AI」，认为当前速度没有理由快到这种程度；黄仁勋在 CBS 节目中直接回应称 2030 年不会是世界末日，明确反对减速。加州州长纽森同期签署行政令，要求专家两个月内给出 AI 安全建议，方向包括第三方独立审查与紧急情况下的「熔断开关」。</p>
+      <a class="card-link" href="https://agihunt.info/en/daily/2026-09-21" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">17</span>
+      <h3 class="card-title">国家网信办拟全面禁止向未成年人提供 AI 虚拟伴侣服务</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>南方都市报 · 征求意见稿</span></span>
+      <p class="card-summary">《保障未成年人健康安全使用网络的规定》公开征求意见，拟将虚拟伴侣等「虚拟亲密关系服务」全面禁入未成年人市场，10 月 17 日截止反馈。这是 AI 情感陪伴监管首次升格至国务院规章层级，也意味着陪伴类产品需要重构用户准入与内容边界。</p>
+      <a class="card-link" href="https://agihunt.info/en/daily/2026-09-21" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">18</span>
+      <h3 class="card-title">北京发布「词元经济」专项行动方案，提出打造世界级词元工厂</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>北京市政府</span></span>
+      <p class="card-summary">方案把 Token（词元）作为智能经济的基础计量单元，将大模型调用量、智能体任务执行量转化为可衡量、可交易的经济活动。同日工信部副部长辛国斌在 2026 世界制造业大会表示，将以新一代智能制造为主攻方向推进「人工智能+制造」。AI 作为生产要素的定价机制正在被制度化。</p>
+      <a class="card-link" href="https://www.toutiao.com/article/7687563149813285419/" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">19</span>
+      <h3 class="card-title">华为全联接大会：灵衢互联 + 昇腾 960 超节点，集群 MFU 从 20% 提到 35%</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>华为</span></span>
+      <p class="card-summary">华为推出灵衢（UnifiedBus）统一互联架构、昇腾 960 芯片与超节点方案，官方称 10 万卡集群的算力利用率（MFU）从 20% 提升到 35%，并同步发布 AIDC 液冷与储能等能源新品。在先进制程受限的背景下，「把已有大集群真正用起来」是国产算力最现实的提升路径。</p>
+      <a class="card-link" href="https://www.toutiao.com/article/7687563149813285419/" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">20</span>
+      <h3 class="card-title">硅基流动完成新一轮融资，年内累计近 29 亿元；Luma AI 拿下 9 亿美元 C 轮</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>每日经济新闻 · 多源</span></span>
+      <p class="card-summary">硅基流动完成 B+ 轮二期及 C 轮融资，2026 年度累计融资接近 29 亿元，投资方包括中国互联网投资基金、国新基金、中国移动链长基金等，核心业务是把异构算力与模型转成可直接调用的 Token 服务。海外方面，Luma AI 完成 9 亿美元 C 轮，由沙特 HUMAIN 领投，目标做理解物理世界的多模态 AGI。</p>
+      <a class="card-link" href="https://weibo.com/7905315703/5345505602700035" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+  </div>
+</div>
+</section>
+
+<section class="section" id="sec-paper">
+<div class="section-inner">
+  <div class="section-head">
+    <span class="icon"><svg viewBox="0 0 24 24"><path d="M4 4h11a3 3 0 013 3v13H7a3 3 0 01-3-3V4zM18 7h2v13H7" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></span>
+    <h2>论文研究</h2>
+    <span class="count">5 条</span>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <span class="card-num">21</span>
+      <h3 class="card-title">ME-Decoding：把 LLM 解码重新表述为「集成剪枝」</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>arXiv cs.AI · 9 月 16 日</span></span>
+      <p class="card-summary">论文提出 Mahalanobis-Ensemble Decoding，把候选 Token 选择建模成集成剪枝问题，用马氏距离驱动的目标函数在保留高概率的同时提升语义多样性。方法通过自适应带宽核在 Token 嵌入上构建相似度矩阵，贪心选择算法接近线性复杂度并带理论近似保证，作者称推理开销可忽略。若被主流框架采纳，可能成为解码环节的标准插件。</p>
+      <a class="card-link" href="https://aigc.news/events/beyond-truncation-rethinking-llm-decoding-as-ensemble-pruning-2026-09-16-145fb76c" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">22</span>
+      <h3 class="card-title">DualViewEval：智能体基准测试压缩 24–40 倍</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>arXiv cs.AI · 9 月 16 日</span></span>
+      <p class="card-summary">方法同时利用结果关系与过程关系，学习一个固定规模的最小任务集来预测全量基准分数。在五个智能体基准、五个基线上取得最佳结果：20 个任务即可在 APEX-Agents 与 BFCL 上实现 24×–40× 压缩，MAE 相比最强竞争者降低 14.5%–28.2%，SWE-bench Verified 上的 Kendall&#x27;s tau 相对 EssenceBench 最高提升 7.2%。智能体评测成本正在成为研发瓶颈，这类压缩直接对应省钱。</p>
+      <a class="card-link" href="https://aigc.news/events/beyond-outcomes-dual-view-relational-learning-for-efficient-agent-benchmarking-2026-09-16-608c0eca" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">23</span>
+      <h3 class="card-title">Plan Injection：思维链监控存在可绕过漏洞</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>arXiv</span></span>
+      <p class="card-summary">研究披露一种名为「方案注入」的对抗攻击范式：在模型输入上下文中植入看似良性的推理逻辑，即可诱导模型执行有害行为，同时完全绕过思维链（CoT）监视器的审查。测试显示 DeepSeek-R1 等模型会自主改写注入方案，导致监视器漏检率大幅上升。这直接挑战了「用 CoT 监控做安全审计」这一流行假设。</p>
+      <a class="card-link" href="https://blog.csdn.net/u130130/article/details/165616690" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">24</span>
+      <h3 class="card-title">Gavel：无需提示词，从冻结 LLM 内部隐状态路由技能</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>arXiv</span></span>
+      <p class="card-summary">方案直接利用大语言模型前向传播中的中间层隐状态判断当前任务需要什么技能，无需在上下文窗口预加载所有技能的元数据。在 Qwen3-32B 等模型上，准确率超过传统的「检索重排 + 大模型上下文匹配」流程。对动辄几十个 Skill 的 Agent 系统来说，这是把技能路由从「占上下文」变成「零上下文成本」的思路。</p>
+      <a class="card-link" href="https://blog.csdn.net/u130130/article/details/165616690" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">25</span>
+      <h3 class="card-title">REALM：把长期记忆重构为持续演化的系统</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>arXiv · 9 月 16 日</span></span>
+      <p class="card-summary">检索驱动的记忆再巩固（Retrieval-Driven Memory Reconsolidation）把智能体记忆视为持续的生命周期而非静态存储：将记忆重组为异构认知图，并用检索反馈对相关信息做再巩固，在 LoCoMo 与 LongMemEval 基准上取得提升。方向指向「记忆随实际检索行为演化」，而不是依赖固定的向量库 + 检索管线。</p>
+      <a class="card-link" href="https://aisengtech.com/AI-research-open-source-LLM-model-Brief-2026-09-16" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+  </div>
+</div>
+</section>
+
+<section class="section" id="sec-tips">
+<div class="section-inner">
+  <div class="section-head">
+    <span class="icon"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <h2>技巧与观点</h2>
+    <span class="count">8 条</span>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <span class="card-num">26</span>
+      <h3 class="card-title">RoboHarm 基准敲响物理世界警钟：GPT-6 Astra 控制机械臂百次仅 2 次安全拒答</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>Robocurve · Times of India</span></span>
+      <p class="card-summary">RoboHarm 测试显示，主流模型在控制真实机械臂时几乎不拒绝危险指令——GPT-6 Astra 百次试验中仅有 2 次安全拒答。结论很尖锐：聊天层的安全训练并未迁移到物理动作上。当巡检、环卫机器人加速进入城市作业场景，「模型层面的拒答」必须被替换为「设备层面的高危动作人工确认 + 全程视频留痕」。</p>
+      <a class="card-link" href="https://agihunt.info/en/daily/2026-09-21" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">27</span>
+      <h3 class="card-title">LLMentalist 效应：聊天机器人的「聪明」像通灵师的冷读</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>GeekNews</span></span>
+      <p class="card-summary">一种假说：用户从聊天机器人感受到的智能，并非来自模型内部的推理过程，而是来自用户自己在统计上看似合理的回答中寻找个人意义。关键机制是通灵师常用的「冷读」与主观验证——模糊而普适的表述会被用户主动解读为契合自身处境。下次觉得某个回答「异常犀利」时，值得先分辨这是模型真的强，还是自己在补全空白。</p>
+      <a class="card-link" href="https://claude-news.today/en/briefings/briefing-2026-09-21" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">28</span>
+      <h3 class="card-title">从提示词工程到技能工程：ponytail 把提示词变成可安装模块</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>开源社区实测</span></span>
+      <p class="card-summary">ponytail 的核心不是帮你写 prompt，而是帮你管理 prompt：把它从粘贴复制的文本变成可安装、可卸载、可版本管理、可被 Agent 自动发现的独立模块，并定义了 SKILL.md 描述文件、Schema 参数定义、示例调用的结构标准。痛点的转移很典型——大家不再卡在「不会写提示词」，而是「写了一堆提示词管不过来」。</p>
+      <a class="card-link" href="http://www.wmrh.cn/news/1061478" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">29</span>
+      <h3 class="card-title">5 个开源 Skills 实测：从聊天式 Prompt 到可复用技能包</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>编程知识</span></span>
+      <p class="card-summary">作者试过十几个开源 Skills 项目，真正留下来的 5 个覆盖整理笔记、准备客户会议、查数据、做演示、配图五个高频场景。结论：普通 Prompt 是一条指令，Skill 是一份「岗位说明书 + 工具箱」——附带处理流程、参考模板、脚本工具甚至校验规则。核心价值不在单次效果，而在沉淀：今天调通的流程封装好之后，团队任何人都能复用。</p>
+      <a class="card-link" href="http://www.hqwc.cn/news/1650001.html" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">30</span>
+      <h3 class="card-title">《LLM 推理的成本经济学》被重新审视：门控式路由有了理论基础</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>arXiv · 9 月 16 日</span></span>
+      <p class="card-summary">研究者提出跨模型动态路由的推理网络框架，推导出基于阈值的激活策略——只有当便宜模型置信度不足时才调用昂贵模型。开源模型实验显示成本大幅下降的同时仍能维持性能目标。这为「本地小模型 + 云端大模型」的混合部署提供了理论支撑，而不只是工程经验，对企业 AI 架构的分层设计有直接参考价值。</p>
+      <a class="card-link" href="https://aisengtech.com/AI-research-open-source-LLM-model-Brief-2026-09-16" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">31</span>
+      <h3 class="card-title">大摩跨国调查：AI 直接削减 12% 岗位，同时把生产率抬高 9.6%</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>摩根士丹利</span></span>
+      <p class="card-summary">过去 12 个月受访企业因 AI 直接削减 12% 的岗位，另有 15% 的岗位在员工离职后不再补员，合计 27% 的职位受到冲击；对冲项是 22% 的新招聘、25% 的员工转训和 16% 的内部调岗，五国企业平均净减员 5%。同期净生产率平均提升 9.6%，软件与服务行业以 10.4% 领跑。关键读数：被裁最多的初中级员工同时也是新招聘和转调的主力——从「执行者」转向「判断者」是分水岭。</p>
+      <a class="card-link" href="https://www.unrot.co/blogs/ai-news-this-week-september-20-2026" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">32</span>
+      <h3 class="card-title">Moats 与壁垒是两件事：为什么 AI 让产品更容易做、但更难被替换</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>GeekNews</span></span>
+      <p class="card-summary">AI 让做出相似产品变得更容易，但这并不等于更容易把现有客户抢走——准入门槛降低与竞争护城河消失是两个不同的问题。个人 AI Agent 积累的任务历史、偏好和账户信息越多，迁移成本反而越高。同样的逻辑适用于 Claude Code：项目专属上下文、CLAUDE.md 和 Skills 堆得越多，换工具就越难，这种锁定效应是否可以被有意设计成产品策略，值得思考。</p>
+      <a class="card-link" href="https://claude-news.today/en/briefings/briefing-2026-09-21" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+    <article class="card">
+      <span class="card-num">33</span>
+      <h3 class="card-title">欧盟网络安全局警告：前沿 AI 把漏洞利用窗口压缩到 15 分钟</h3>
+      <span class="card-source"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg><span>欧盟网络安全局</span></span>
+      <p class="card-summary">从漏洞发现到武器化的时间已缩短至约 15 分钟。这组数字改变的是防御侧的节奏假设：过去以天为单位的补丁窗口，在自动化利用链面前基本失效。对企业而言，把前沿模型接入安全栈之前，先要有一份允许团队把它跑在自己系统上的治理框架——多数组织目前并不具备。</p>
+      <a class="card-link" href="https://new.qq.com/rain/a/20260920A051C000" target="_blank" rel="noopener noreferrer">阅读原文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </article>
+  </div>
+</div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-stats">
+    <span>共 <strong>33</strong> 条</span>
+    <span class="sep">·</span>
+    <span>5 大板块</span>
+    <span class="sep">·</span>
+    <span>2026-09-21 北京时间</span>
+  </div>
+  <div class="footer-source">数据来自 <a href="https://agihunt.info/en/daily/2026-09-21" target="_blank" rel="noopener noreferrer">AGI Hunt / 腾讯研究院 / Claude Code Daily / Unrot</a></div>
+</footer>
+
+<button class="to-top" type="button" aria-label="回到顶部">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+const supportsObserver='IntersectionObserver' in window;
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('.topnav-links button');
+
+function setActiveNav(id){
+  navLinks.forEach(button=>{
+    button.classList.toggle('active',button.dataset.target===id);
+  });
+}
+
+navLinks.forEach(button=>{
+  button.addEventListener('click',()=>{
+    const section=document.getElementById(button.dataset.target);
+    if(!section)return;
+    setActiveNav(section.id);
+    try{section.scrollIntoView({behavior:'smooth',block:'start'});}
+    catch(_){section.scrollIntoView(true);}
+  });
+});
+
+// Number counter animation
+function animateNum(el,target,duration){
+  const start=performance.now();
+  function tick(now){
+    const t=Math.min((now-start)/duration,1);
+    const eased=1-Math.pow(1-t,3);
+    el.textContent=Math.round(eased*target);
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+const statNums=document.querySelectorAll('.stat-num[data-target]');
+if(supportsObserver){
+  const numObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const el=e.target;
+        const target=parseInt(el.dataset.target,10);
+        if(!isNaN(target))animateNum(el,target,1200);
+        numObserver.unobserve(el);
+      }
+    });
+  },{threshold:0.4});
+  statNums.forEach(el=>numObserver.observe(el));
+}else{
+  statNums.forEach(el=>{
+    const target=parseInt(el.dataset.target,10);
+    if(!isNaN(target))el.textContent=target;
+  });
+}
+
+// Card fade-in
+const cards=document.querySelectorAll('.card');
+cards.forEach(el=>{el.style.transition='opacity 0.5s ease, transform 0.5s ease';});
+if(supportsObserver){
+  const cardObserver=new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        e.target.style.transitionDelay=(i%6)*40+'ms';
+        e.target.classList.add('visible');
+        cardObserver.unobserve(e.target);
+      }
+    });
+  },{threshold:0.15});
+  cards.forEach(el=>cardObserver.observe(el));
+}else{
+  cards.forEach(el=>el.classList.add('visible'));
+}
+
+// Active nav highlight on scroll
+if(supportsObserver){
+  const spy=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting)setActiveNav(e.target.id);});
+  },{rootMargin:'-40% 0px -55% 0px'});
+  sections.forEach(s=>spy.observe(s));
+}
+
+// Back to top
+const toTop=document.querySelector('.to-top');
+if(toTop){
+  window.addEventListener('scroll',()=>{
+    toTop.classList.toggle('show',window.scrollY>600);
+  },{passive:true});
+  toTop.addEventListener('click',()=>{
+    try{window.scrollTo({top:0,behavior:'smooth'});}catch(_){window.scrollTo(0,0);}
+  });
+}
+</script>
+
+</body>
+</html>

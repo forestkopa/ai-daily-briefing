@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI HOT · 日报 — UI 预览（bankon 风格）</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --paper:#F2F1EC;
+  --paper-2:#E9E7E0;
+  --card:#F8F7F3;
+  --white:#FFFFFF;
+  --ink:#0B0B0B;
+  --muted:#5C5B54;
+  --muted-2:#6E6D66;
+  --muted-3:#8A8980;
+  --accent:#F2704F;
+  --accent-deep:#EE5A3C;
+  --accent-ink:#210C05;
+  --hair:rgba(11,11,11,.14);
+  --r-xl:26px; --r-lg:20px; --r-md:13px; --r-pill:999px;
+  --sh:4px 4px 0 var(--ink);
+  --sh-sm:3px 3px 0 var(--ink);
+  --ff:"Inter","Segoe UI Variable Display","Segoe UI",-apple-system,BlinkMacSystemFont,
+       "HarmonyOS Sans SC","MiSans","PingFang SC","Microsoft YaHei","微软雅黑",
+       system-ui,sans-serif;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:var(--ff);font-size:15px;font-weight:400;line-height:1.55;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  font-variant-numeric:tabular-nums;
+}
+a{color:inherit}
+.wrap{width:100%;max-width:1240px;margin:0 auto;padding:0 24px}
+
+/* ---------- 顶栏 ---------- */
+.topnav{
+  position:sticky;top:0;z-index:60;
+  background:rgba(242,241,236,.86);
+  -webkit-backdrop-filter:saturate(1.5) blur(12px);
+  backdrop-filter:saturate(1.5) blur(12px);
+  border-bottom:2px solid var(--ink);
+}
+.topnav-in{max-width:1240px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;gap:26px}
+.brand{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:700;letter-spacing:-.02em;white-space:nowrap}
+.brand .mark{position:relative;width:20px;height:20px;border-radius:50%;background:var(--ink);flex:0 0 auto}
+.brand .mark::after{content:"";position:absolute;left:6px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1 1 0;min-width:0;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{
+  position:relative;font-size:13px;font-weight:500;color:var(--muted);
+  text-decoration:none;padding:7px 12px;border-radius:var(--r-pill);
+  white-space:nowrap;transition:color .18s,background .18s;
+}
+.nav-links a:hover{color:var(--ink);background:var(--paper-2)}
+.nav-links a.on{color:var(--ink);font-weight:600}
+.nav-links a.on::after{content:"";position:absolute;left:50%;bottom:0;margin-left:-2.5px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:14px;flex:0 0 auto}
+.nav-date{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.02em;white-space:nowrap}
+
+/* 药丸按钮（描边） */
+.pill{
+  display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 16px;
+  border:1.5px solid var(--ink);border-radius:var(--r-pill);background:transparent;
+  color:var(--ink);font-family:var(--ff);font-size:13px;font-weight:600;line-height:1;
+  cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:background .18s,color .18s,transform .18s;
+}
+.pill:hover{background:var(--ink);color:#fff;transform:translateY(-1px)}
+.pill svg{width:14px;height:14px;flex:0 0 auto}
+
+/* ---------- 首屏 ---------- */
+.hero{padding:62px 0 0}
+.hero-grid{display:grid;grid-template-columns:1.34fr .86fr;gap:52px;align-items:end}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;margin-bottom:24px;
+  font-size:11.5px;font-weight:600;letter-spacing:.11em;color:var(--muted);text-transform:uppercase;
+}
+.eyebrow .live{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(242,112,79,.18)}
+h1{font-size:clamp(44px,7.2vw,88px);line-height:.96;letter-spacing:-.022em;font-weight:800}
+h1 .l2{display:block}
+h1 .hl{color:var(--accent)}
+.hero-right p{max-width:38ch;font-size:14px;color:var(--muted);line-height:1.68}
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+
+.btn-dark{
+  display:inline-flex;align-items:center;gap:8px;padding:13px 21px;
+  background:var(--ink);color:#fff;border:2px solid var(--ink);border-radius:var(--r-md);
+  font-family:var(--ff);font-size:13px;font-weight:600;line-height:1;cursor:pointer;
+  transition:background .18s,border-color .18s,color .18s,transform .18s;
+}
+.btn-dark:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);transform:translateY(-1px)}
+.btn-line{
+  display:inline-flex;align-items:center;gap:8px;padding:13px 21px;
+  background:transparent;color:var(--ink);border:2px solid var(--ink);border-radius:var(--r-md);
+  font-family:var(--ff);font-size:13px;font-weight:600;line-height:1;cursor:pointer;
+  text-decoration:none;transition:background .18s,color .18s,transform .18s;
+}
+.btn-line:hover{background:var(--ink);color:#fff;transform:translateY(-1px)}
+.btn-dark svg,.btn-line svg{width:14px;height:14px;flex:0 0 auto}
+
+/* 数据条 */
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);margin-top:46px;
+  border:2px solid var(--ink);border-radius:var(--r-xl);overflow:hidden;background:var(--card);
+}
+.stat{padding:20px 22px;border-right:2px solid var(--ink)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-size:32px;font-weight:800;letter-spacing:-.035em;line-height:1}
+.stat span{display:block;margin-top:9px;font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.05em}
+
+/* ---------- 焦点区 ---------- */
+.spot{display:grid;grid-template-columns:1.58fr 1fr;gap:16px;margin-top:16px}
+.feature{
+  display:grid;grid-template-columns:1.24fr .76fr;gap:30px;align-items:center;
+  background:var(--card);border:2px solid var(--ink);border-radius:var(--r-xl);padding:24px 28px 28px;
+}
+.feat-head{
+  grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  padding-bottom:15px;border-bottom:1.5px solid var(--hair);
+}
+.feat-head h2{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.feat-head .ver{font-size:11.5px;font-weight:500;color:var(--muted-3);letter-spacing:.06em}
+.lead h3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:20px;font-weight:700;line-height:1.38;letter-spacing:-.018em;margin-bottom:12px}
+.lead p{
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;
+  font-size:13px;color:var(--muted);line-height:1.68;margin-bottom:16px;
+}
+.link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;text-decoration:none}
+.link svg{width:13px;height:13px;flex:0 0 auto;transition:transform .2s}
+.link:hover{color:var(--accent-deep)}
+.link:hover svg{transform:translate(2px,-2px)}
+.illus{display:grid;place-items:center}
+.illus svg{width:100%;max-width:214px;height:auto;display:block}
+
+.spot-right{display:grid;grid-template-rows:1.25fr 1fr;gap:16px}
+.accent-card{
+  display:flex;flex-direction:column;justify-content:space-between;gap:18px;
+  background:linear-gradient(158deg,#F58A67 0%,#EE5A3C 100%);
+  border:2px solid var(--ink);border-radius:var(--r-xl);padding:24px 26px;box-shadow:var(--sh);
+  transition:transform .2s cubic-bezier(.2,.7,.3,1),box-shadow .2s;
+}
+.accent-card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.accent-card .row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.accent-card h3{font-size:21px;font-weight:700;letter-spacing:-.02em;color:var(--accent-ink)}
+.accent-card .big{font-size:56px;font-weight:800;letter-spacing:-.045em;line-height:1;color:var(--accent-ink)}
+.accent-card p{font-size:12.5px;line-height:1.6;color:#33150C}
+.circ{
+  width:34px;height:34px;flex:0 0 auto;display:grid;place-items:center;
+  border:2px solid var(--accent-ink);border-radius:50%;background:transparent;
+  color:var(--accent-ink);cursor:pointer;transition:background .18s,color .18s;
+}
+.circ:hover{background:var(--accent-ink);color:var(--accent)}
+.circ svg{width:15px;height:15px}
+
+.mini{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:var(--card);border:2px solid var(--ink);border-radius:var(--r-xl);padding:20px 24px;
+  transition:transform .2s cubic-bezier(.2,.7,.3,1),box-shadow .2s;
+}
+.mini:hover{transform:translate(-2px,-2px);box-shadow:var(--sh-sm)}
+.mini h3{font-size:17px;font-weight:700;letter-spacing:-.015em}
+.mini .sub{margin-top:6px;font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.02em}
+.mini .circ{border-color:var(--ink);color:var(--ink)}
+.mini:hover .circ{background:var(--ink);color:#fff}
+
+/* ---------- 板块 ---------- */
+.section{padding:58px 0 0;scroll-margin-top:80px}
+.sec-head{
+  display:flex;align-items:center;gap:14px;margin-bottom:20px;
+  padding-bottom:14px;border-bottom:2px solid var(--ink);
+}
+.sec-head h2{font-size:23px;font-weight:700;letter-spacing:-.02em;white-space:nowrap}
+.sec-head .chip{
+  flex:0 0 auto;border:1.5px solid var(--ink);border-radius:var(--r-pill);
+  padding:3px 11px;font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:.04em;
+}
+.sec-head .idx{margin-left:auto;flex:0 0 auto;font-size:11.5px;font-weight:600;color:var(--muted-3);letter-spacing:.1em}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(292px,1fr));gap:14px}
+.card{
+  position:relative;display:flex;flex-direction:column;
+  background:var(--card);border:2px solid var(--ink);border-radius:var(--r-lg);
+  padding:20px 22px 18px;
+  transition:transform .2s cubic-bezier(.2,.7,.3,1),box-shadow .2s;
+}
+.card:hover{transform:translate(-2px,-3px);box-shadow:var(--sh)}
+.card .no{
+  position:absolute;right:16px;top:16px;width:28px;height:28px;
+  display:grid;place-items:center;border:1.5px solid var(--ink);border-radius:50%;
+  font-size:11px;font-weight:700;letter-spacing:-.02em;color:var(--muted);
+  transition:border-color .18s,color .18s;
+}
+.card:hover .no{border-color:var(--accent);color:var(--accent)}
+.card h3{
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  padding-right:38px;margin-bottom:11px;
+  font-size:14.5px;font-weight:600;line-height:1.5;letter-spacing:-.01em;
+}
+.meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:11px;font-weight:500;color:var(--muted-2);letter-spacing:.03em}
+.meta .src{color:var(--muted);font-weight:600}
+.meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted-2);flex:0 0 auto}
+.card p{
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;
+  flex:1;margin-bottom:16px;font-size:12.5px;color:var(--muted);line-height:1.64;
+}
+.card .link{font-size:12px}
+@media (min-width:900px){
+  .card.wide{grid-column:span 2}
+  .card.wide h3{-webkit-line-clamp:2}
+  .card.wide p{-webkit-line-clamp:3}
+}
+
+/* ---------- 页脚 ---------- */
+.footer{margin-top:66px;border-top:2px solid var(--ink);padding:26px 0 44px}
+.foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+  font-size:12px;font-weight:500;color:var(--muted)}
+.foot .grp{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.foot .dot{width:3px;height:3px;border-radius:50%;background:var(--muted-2)}
+.foot strong{color:var(--ink);font-weight:700}
+.foot a{color:var(--ink);font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--accent);padding-bottom:1px}
+
+/* ---------- 浮层 ---------- */
+.to-top{
+  position:fixed;right:22px;bottom:22px;z-index:70;width:46px;height:46px;
+  display:grid;place-items:center;background:var(--card);color:var(--ink);
+  border:2px solid var(--ink);border-radius:50%;cursor:pointer;
+  opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .25s,transform .25s,background .18s,color .18s;
+}
+.to-top.show{opacity:1;transform:none;pointer-events:auto}
+.to-top:hover{background:var(--ink);color:#fff}
+.to-top svg{width:18px;height:18px}
+
+.toast{
+  position:fixed;left:50%;bottom:26px;z-index:80;transform:translate(-50%,14px);
+  display:flex;align-items:center;gap:9px;padding:12px 18px;
+  background:var(--ink);color:#fff;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:600;letter-spacing:.01em;
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+  max-width:calc(100vw - 40px);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast .dotpy{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:0 0 auto}
+
+.badge-preview{
+  position:fixed;right:22px;bottom:78px;z-index:70;
+  display:flex;align-items:center;gap:8px;padding:8px 14px;
+  background:var(--paper);border:1.5px dashed var(--muted-2);border-radius:var(--r-pill);
+  font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:.03em;
+}
+.badge-preview .dotpy{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:0 0 auto}
+
+/* 入场动画 —— 关键：必须挂在 html.js-ready 下。
+   否则一旦 JS 未执行（脚本报错 / 被拦 / 打印环境），.reveal 会永远停在 opacity:0，
+   36 张卡片全部不可见。生产 build.py 用的就是这个防护写法，保持一致。 */
+html.js-ready .reveal{opacity:0;transform:translateY(14px)}
+.reveal.in{opacity:1;transform:none;transition:opacity .45s ease,transform .45s cubic-bezier(.2,.7,.3,1)}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:1080px){
+  .hero-grid{grid-template-columns:1fr;gap:30px;align-items:start}
+  .hero-right p{max-width:56ch}
+  .spot{grid-template-columns:1fr}
+  .feature{grid-template-columns:1fr}
+  .illus svg{max-width:180px}
+}
+@media (max-width:860px){
+  .nav-date{display:none}
+}
+@media (max-width:720px){
+  .wrap{padding:0 18px}
+  .topnav-in{padding:12px 18px;gap:14px}
+  .nav-links a{padding:6px 9px;font-size:12.5px}
+  .hero{padding:40px 0 0}
+  h1{letter-spacing:-.02em}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat{border-bottom:2px solid var(--ink)}
+  .stat:nth-child(2n){border-right:0}
+  .stat:nth-last-child(-n+2){border-bottom:0}
+  .cards{grid-template-columns:1fr;gap:12px}
+  .card{padding:18px 18px 16px}
+  .feature{padding:20px}
+  .section{padding:44px 0 0}
+  .sec-head h2{font-size:20px}
+  .sec-head{gap:10px;flex-wrap:wrap}
+  .badge-preview{right:16px;bottom:68px;padding:7px 12px}
+  .to-top{right:16px;bottom:16px;width:42px;height:42px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html.js-ready .reveal,.reveal{opacity:1!important;transform:none!important}
+}
+@media print{
+  .topnav,.to-top,.badge-preview,.toast{display:none!important}
+  .card{break-inside:avoid}
+  html.js-ready .reveal,.reveal{opacity:1!important;transform:none!important}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.className+=' js-ready';</script>
+
+<nav class="topnav" aria-label="板块导航">
+  <div class="topnav-in">
+    <div class="brand"><span class="mark"></span>AI HOT · 日报</div>
+    <div class="nav-links"><a href="#sec1" class="on">模型与厂商</a><a href="#sec2">产品与工程</a><a href="#sec3">行业动态</a><a href="#sec4">研报与数据</a><a href="#sec5">技巧与观点</a></div>
+    <div class="nav-right">
+      <span class="nav-date">2026-09-24 · 周四</span>
+      <button class="pill" type="button" data-refresh><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>刷新</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="eyebrow"><span class="live"></span>2026-09-24 · 周四 · 北京时间</div>
+        <h1>今日 <span class="hl">AI</span><span class="l2">圈发生了什么</span></h1>
+      </div>
+      <div class="hero-right">
+        <p>由 RSS 自动聚合，来自 10 个中文信息源的精选合辑（零 AI 调用）</p>
+        <div class="hero-cta">
+          <button class="btn-dark" type="button" data-refresh><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>刷新数据</button>
+          <a class="btn-line" href="#sec1">浏览今日精选 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="stats"><div class="stat"><b>36</b><span>今日条数</span></div><div class="stat"><b>5</b><span>分类板块</span></div><div class="stat"><b>10</b><span>收录信源</span></div><div class="stat"><b>自动</b><span>每日更新</span></div></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="spot">
+    <section class="feature reveal">
+      <div class="feat-head">
+        <h2>最新更新</h2>
+        <span class="ver">v 2026-09-24 08:34</span>
+      </div>
+      <div class="lead"><h3>【钛晨报】“十五五”民政工作怎么干？四大重点任务，养老排在第一位；马斯克预测未来世界：20年后可能有1000亿台人形机器人；高瓴创投原合伙人严文韬正式入职DeepSeek</h3><p>经合组织上调2026年全球经济增速预期至2.9%；恒生指数公司推出恒生半导体产业指数等八条新指数；中国将适度超前、系统推进新一代通信网建设，推动算力设施扩容提质；央行：9月24日将开展8000亿元MLF操作，期限为1年期；苹果出手限制“摇一摇”广告；SpaceX据悉停止猎鹰9号2028年以后预订，业内正掀起运力抢购热潮</p><a class="link" href="https://www.tmtpost.com/8151174.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></div>
+      <div class="illus">
+<svg viewBox="0 0 268 196" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <clipPath id="ck3"><rect x="26" y="18" width="152" height="88" rx="14"/></clipPath>
+  </defs>
+  <!-- 后一张 -->
+  <rect x="72" y="92" width="152" height="88" rx="14" fill="#E9E7E0" stroke="#0B0B0B" stroke-width="2.5"/>
+  <path d="M92 150h58" stroke="#0B0B0B" stroke-width="2.5" stroke-linecap="round" opacity=".22"/>
+  <!-- 中间一张 -->
+  <rect x="49" y="55" width="152" height="88" rx="14" fill="#F8F7F3" stroke="#0B0B0B" stroke-width="2.5"/>
+  <path d="M69 113h34" stroke="#0B0B0B" stroke-width="2.5" stroke-linecap="round" opacity=".22"/>
+  <!-- 最前一张 -->
+  <g clip-path="url(#ck3)">
+    <rect x="26" y="18" width="152" height="88" fill="#FFFFFF"/>
+    <rect x="26" y="70" width="152" height="36" fill="#F2704F"/>
+    <rect x="42" y="80" width="30" height="9" rx="2" fill="#0B0B0B"/>
+    <rect x="42" y="93" width="18" height="5" rx="2.5" fill="#0B0B0B" opacity=".45"/>
+    <rect x="126" y="79" width="36" height="12" rx="6" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="2"/>
+  </g>
+  <rect x="26" y="18" width="152" height="88" rx="14" fill="none" stroke="#0B0B0B" stroke-width="2.5"/>
+  <path d="M45 42h44" stroke="#0B0B0B" stroke-width="2.5" stroke-linecap="round" opacity=".22"/>
+  <path d="M45 54h26" stroke="#0B0B0B" stroke-width="2.5" stroke-linecap="round" opacity=".22"/>
+</svg>
+</div>
+    </section>
+
+    <div class="spot-right">
+      <article class="accent-card reveal">
+        <div class="row">
+          <h3>今日收录</h3>
+          <button class="circ" type="button" aria-label="查看统计" onclick="location.hash='#sec1'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 12h12"/></svg></button>
+        </div>
+        <div>
+          <div class="big">36</div>
+          <p>来自 10 个中文信息源，当日精选全部由本地脚本抓取，零 AI 调用。</p>
+        </div>
+      </article>
+      <article class="mini reveal">
+        <div>
+          <h3>共 5 大板块</h3>
+          <div class="sub">模型 · 产品 · 行业 · 研报 · 观点</div>
+        </div>
+        <button class="circ" type="button" aria-label="展开板块" onclick="location.hash='#sec1'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg></button>
+      </article>
+    </div>
+  </div>
+
+  <section class="section" id="sec1"><div class="sec-head"><h2>模型与厂商</h2><span class="chip">6 条</span><span class="idx">01 / 05</span></div><div class="cards"><article class="card reveal wide"><span class="no">01</span><h3>【钛晨报】“十五五”民政工作怎么干？四大重点任务，养老排在第一位；马斯克预测未来世界：20年后可能有1000亿台人形机器人；高瓴创投原合伙人严文韬正式入职DeepSeek</h3><div class="meta"><span class="src">钛媒体</span><span class="dot"></span><span>2026-09-24 07:20</span></div><p>经合组织上调2026年全球经济增速预期至2.9%；恒生指数公司推出恒生半导体产业指数等八条新指数；中国将适度超前、系统推进新一代通信网建设，推动算力设施扩容提质；央行：9月24日将开展8000亿元MLF操作，期限为1年期；苹果出手限制“摇一摇”广告；SpaceX据悉停止猎鹰9号2028年以后预订，业内正掀起运力抢购热潮</p><a class="link" href="https://www.tmtpost.com/8151174.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">02</span><h3>杀猪盘最贵的一道工序，AI 接手了</h3><div class="meta"><span class="src">钛媒体</span><span class="dot"></span><span>2026-09-23 19:45</span></div><p>让 AI 扮演一个虚构角色陪人聊天，已经是一个成型的商业门类。近期，这个门类里也出现了另一类看起来并非合规的操作，从全球来看甚至有应用开发商用大模型搭起了 20 多款约会 App，用户刷到的“匹配对象”里 75% 不是真人。用户按聊天时长付费，聊得越久花得越多。</p><a class="link" href="https://www.tmtpost.com/8151037.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">03</span><h3>企业数据太多，AI知道得太少：千问办公的上下文生意</h3><div class="meta"><span class="src">钛媒体</span><span class="dot"></span><span>2026-09-23 19:34</span></div><p>一家中大型企业内部的数据规模平均约为150PB，而目前最强模型的上下文窗口多为 100 万token左右。</p><a class="link" href="https://www.tmtpost.com/8151019.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">04</span><h3>具身智能的转机和出清，哪个先来？</h3><div class="meta"><span class="src">钛媒体</span><span class="dot"></span><span>2026-09-23 18:35</span></div><p>“银河通用要是觉得自己占理，就出来一起聊聊虚假收入、关联交易、突击上市割韭菜的问题，如果觉得自己不占理就低调点装死也行，发声明、报警、找水军，简直是灾难级公关。”搭配捂脸哭的表情，梅卡曼德机器人公司创始人兼CEO邵天兰又在自己新发的朋友圈连着评论了三条。</p><a class="link" href="https://www.tmtpost.com/8149233.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">05</span><h3>联想亮相阿里云栖大会：联想天禧AI把超级组织落地到端侧</h3><div class="meta"><span class="src">量子位</span><span class="dot"></span><span>2026-09-23 18:35</span></div><p>联想天禧AI携全场景多端产品矩阵亮相阿里云栖大会</p><a class="link" href="https://www.qbitai.com/2026/09/496609.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">06</span><h3>让Token生产更高效：异构混推的关键技术演进与创新实践</h3><div class="meta"><span class="src">量子位</span><span class="dot"></span><span>2026-09-23 17:56</span></div><p>随之而来的，是AI基础设施面临的全新命题与挑战：当Token调用量迈向千倍级增长，推理系统如何承接持续攀升的需求？如何通过异构算力实现高效、稳定的Token生产？</p><a class="link" href="https://www.qbitai.com/2026/09/496578.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article></div></section><section class="section" id="sec2"><div class="sec-head"><h2>产品与工程</h2><span class="chip">8 条</span><span class="idx">02 / 05</span></div><div class="cards"><article class="card reveal wide"><span class="no">01</span><h3>Meta 推出 349 美元无摄像头的雷朋 Audio 智能眼镜：43g 重 + 12 小时续航，还有女星 Lisa 联名眼镜等新品</h3><div class="meta"><span class="src">IT之家</span><span class="dot"></span><span>2026-09-24 08:19</span></div><p>IT之家 9 月 24 日消息，Meta 今日在 Connect 大会上发布了新一代 Ray-Ban Meta Audio 智能眼镜，并推出新一代 Ray-Ban Meta（Gen 3）及多款 Meta AI 眼镜。 同时，Meta 宣布将个人 AI 智能体 Muse 引入 AI 眼镜，用户无需拿出手机即可通过语音等方式使用相关功能。</p><a class="link" href="https://www.ithome.com/1/006/531.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">02</span><h3>腾讯 QClaw 微信远程办公 AI 助手宣布 12 月 24 日停运，即日起停止新用户注册，</h3><div class="meta"><span class="src">IT之家</span><span class="dot"></span><span>2026-09-24 07:57</span></div><p>IT之家 9 月 24 日消息，腾讯 QClaw 微信远程办公 AI 助手今日发布公告称，因业务发展调整，QClaw 将于 2026 年 12 月 24 日 00:00 正式停止运营。 停止运营安排 2026 年 9 月 24 日 自公告之日起，停止新用户注册，停止订阅服务购买与续费（已开通自动续费的用户将自动停止续费扣款，无需手动操作取消）。</p><a class="link" href="https://www.ithome.com/1/006/528.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">03</span><h3>IT早报 0924：任正非重申华为不造车；国行苹果 iOS 27.2 Beta 版可屏蔽“摇一摇”广告；5999 元起小米 18 Pro 系列发布；闲鱼称涉未成年淫秽系不实消息...</h3><div class="meta"><span class="src">IT之家</span><span class="dot"></span><span>2026-09-24 07:52</span></div><p>“IT早报”时间，大家好，现在是 2026 年 9 月 24 日星期四，今天的重要科技资讯有： 1. 任正非重申华为不造车，但是很乐意发挥在智能化方面的特长帮助造好车 奕境汽车品牌总经理曾清林 9 月 23 日发文，回忆了自己 9 月 22 日拜访华为创始人任正非的经历。据其回忆，任正非表示，东风有非常好的造车底蕴和基础，要充分发挥这些优势。</p><a class="link" href="https://www.ithome.com/1/006/525.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">04</span><h3>Anthropic 宣布成立生命科学团队和实验室，Claude 自主发现新型酶系统</h3><div class="meta"><span class="src">IT之家</span><span class="dot"></span><span>2026-09-24 07:45</span></div><p>IT之家 9 月 24 日消息，当地时间 9 月 23 日，Anthropic 宣布成立生命科学研究团队及自有分子生物学实验室，并公布了一项由 Claude 参与生物学研究取得的早期成果。 在人类科学家仅提供宏观研究方向的情况下，Claude 自主发现了一种此前未被表征的酶系统，Anthropic 将其命名为阵列关联逆转录酶（Array-associated…</p><a class="link" href="https://www.ithome.com/1/006/524.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">05</span><h3>OpenAI CEO 奥尔特曼联合国演讲：AI 可能走向文艺复兴，也可能带来工业革命式动荡</h3><div class="meta"><span class="src">IT之家</span><span class="dot"></span><span>2026-09-24 07:31</span></div><p>IT之家 9 月 24 日消息，当地时间 9 月 23 日，OpenAI CEO 萨姆 · 奥尔特曼（Sam Altman）在联合国安理会就 AI 议题发表讲话，讨论 AI 发展带来的机遇与风险，并呼吁加强国际合作，建立针对前沿 AI 系统的能力评估、风险评估、安全防护和人类监督标准。</p><a class="link" href="https://www.ithome.com/1/006/521.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">06</span><h3>苹果推送 watchOS 27.0.1 更新：修复 Apple Watch Series 12/Ultra 4 随机重启故障</h3><div class="meta"><span class="src">IT之家</span><span class="dot"></span><span>2026-09-24 07:21</span></div><p>IT之家 9 月 24 日消息，科技媒体 AppleInsider 昨日（9 月 23 日）发布博文，报道称苹果公司面向 Apple Watch Series 12 和 Apple Watch Ultra 4 智能手表， 紧急推送 watchOS 27.0.1 更新（24R365），修复随机重启故障。</p><a class="link" href="https://www.ithome.com/1/006/520.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">07</span><h3>苹果 HomePod 运行 Siri AI 交互体验曝光：白 / 蓝 / 橙主色调指示灯</h3><div class="meta"><span class="src">IT之家</span><span class="dot"></span><span>2026-09-24 07:05</span></div><p>IT之家 9 月 24 日消息，消息源 @itspdfu 今天（9 月 24 日）在 X 平台发布推文，挖掘 audioOS 27 系统， 发现了适用于 HomePod 的 Siri AI 交互体验。 IT之家注：audioOS 并非苹果官方叫法，是指在苹果 HomePod 上运行的系统软件版本名称。</p><a class="link" href="https://www.ithome.com/1/006/519.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">08</span><h3>微软 Surface Pro 12 与 Laptop 13 升级高通骁龙 X2 Plus 处理器，基础内存从 8GB 提升至 16GB 且价格大涨</h3><div class="meta"><span class="src">IT之家</span><span class="dot"></span><span>2026-09-24 06:48</span></div><p>IT之家 9 月 24 日消息，当地时间 9 月 23 日，微软在高通 2026 骁龙峰会上发布了新一代 Surface Pro 12 英寸和 Surface Laptop 13 英寸新品。 两款产品均搭载高通骁龙 X2 Plus 处理器，同时推出了一款集成触觉反馈的 Surface Mouse 鼠标。 新品将于 10 月 13 日起在部分市场上市。</p><a class="link" href="https://www.ithome.com/1/006/517.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article></div></section><section class="section" id="sec3"><div class="sec-head"><h2>行业动态</h2><span class="chip">8 条</span><span class="idx">03 / 05</span></div><div class="cards"><article class="card reveal wide"><span class="no">01</span><h3>不要被 AI 炒作愚弄</h3><div class="meta"><span class="src">Solidot</span><span class="dot"></span><span>2026-09-23 23:29</span></div><p>Anthropic 声称其模型 Claude Mythos 在发现软件漏洞上胜过大多数安全专家。随后发生了 OpenAI–Hugging Face 安全事件，此后 Anthropic（自豪）和 Meta（不情愿）也披露了各自模型的类似事件。紧接着 Anthropic 宣称其模型取得了数学领域的突破；OpenAI 也声称自己取得了数学突破。</p><a class="link" href="https://www.solidot.org/story?sid=85466" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">02</span><h3>英国准备施压 Google 向 Android 和 Chrome 用户展示 AI 助手选择屏</h3><div class="meta"><span class="src">Solidot</span><span class="dot"></span><span>2026-09-23 22:56</span></div><p>英国竞争监管机构 CMA 想要让 Android 和 Chrome 用户对 AI 助手和搜索引擎有更大的选择权和控制权。CMA 公布了一份提案，要求 Google 在用户首次设置 Android 手机或打开 Chrome 浏览器时，向其展示多种搜索引擎供选择，并且每年提示用户选择一个默认搜索引擎；符合技术与安全标准的 AI 助手也必须获准出现在选择屏上上。</p><a class="link" href="https://www.solidot.org/story?sid=85465" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">03</span><h3>GPT-6 Sol 降价 50% 的秘密：消失的 Terra，一场模型梯队平移</h3><div class="meta"><span class="src">雷峰网</span><span class="dot"></span><span>2026-09-23 20:47</span></div><p>奥圣上台，梁圣危机了么？ 作者丨 高允毅 编辑丨岑 峰 OpenAI 也走性价比路线了？别被它的“偷梁换柱”给骗了。 今早，硅谷又热闹了，迎来双雄对决。Anthropic 推出 Claude Opus 5.5，OpenAI 紧接着推出 GPT-6 Sol 与 Luna。和以往模型更新不同的是，行业的讨论点聚焦到了 “大家怎么都变便宜了”。</p><a class="link" href="https://www.leiphone.com/category/yanxishe/gnzWAPK52Igo0DSk.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">04</span><h3>星驿付与慧徕店亮相2026云栖大会，AI生成数字商业无限可能</h3><div class="meta"><span class="src">雷峰网</span><span class="dot"></span><span>2026-09-23 18:09</span></div><p>9月22日至24日，2026云栖大会在杭州盛大召开。云栖大会是阿里巴巴集团的年度盛会，由阿里云协同其合作伙伴与全球客户共同呈现。作为全球顶级科技盛会，大会以“智以致用”为主题，以Agentic AI为核心锚点，串起芯片、云基础设施、模型能力与模型服务、Agentic应用的完整链路，直抵生产方式深层变革。</p><a class="link" href="https://www.leiphone.com/category/industrynews/ZzpzZcKEcWjfW1ez.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">05</span><h3>蚂蚁密算发布企业级可信智能云服务平台“密算一号”，启动首批定向邀测</h3><div class="meta"><span class="src">雷峰网</span><span class="dot"></span><span>2026-09-23 17:23</span></div><p>2026云栖大会在杭州召开，在蚂蚁密算与阿里云共同承办的“密算织域 融数成智”专题论坛上，蚂蚁密算发布企业级可信智能云服务平台“密算一号”，并启动首批定向邀测。 平台以密态计算为基础，同时连接云上大模型、智能体与算力，核心能力是让企业数据在“可用不可见、可控可计量”的前提下，安全地参与跨机构合作和云上AI应用。</p><a class="link" href="https://www.leiphone.com/category/industrynews/vcFXR69YQUTL9k43.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">06</span><h3>丰田命令员工训练人形机器人，否认会替代人类员工</h3><div class="meta"><span class="src">Solidot</span><span class="dot"></span><span>2026-09-23 16:32</span></div><p>丰田的员工正在帮助训练人形机器人，它计划未来几年部署 40 万台工厂机器人，人形机器人是其中的一部分，但高管否认它们会替代人类员工。丰田在装配线上部署了 ELEY 人形机器人，而员工则通过佩戴基于机器人手指的装置去训练这些通过轮子移动的机器人执行需要精细手部动作的任务。丰田是全球最大的汽车公司之一，在全世界有 60 座工厂，雇佣了 1.8 万员工。</p><a class="link" href="https://www.solidot.org/story?sid=85461" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">07</span><h3>从设备到场景，影像产业正在打开怎样的新边界？</h3><div class="meta"><span class="src">雷峰网</span><span class="dot"></span><span>2026-09-23 14:05</span></div><p>SmallRig斯莫格第三届全球影像场景产业大会（2026） 9月22日，由乐其创新SmallRig联合36氪主办的第三届全球影像场景产业大会（2026，下称大会）在深圳举行。本届大会以“连接·共生·新边界”为主题，分为主旨会场和影像场景人才·未来场、影像场景产品·文创场、影像场景技术·新边界三大平行分会场，邀请影像品牌、科技企业、创作者、文创IP、产业服务…</p><a class="link" href="https://www.leiphone.com/category/industrynews/K21m19f4RE96h2ex.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">08</span><h3>启仔远仔，想成为第一个被你带回家的硅基伙伴</h3><div class="meta"><span class="src">雷峰网</span><span class="dot"></span><span>2026-09-23 12:59</span></div><p>概念机满天飞的赛道里，启元机器人备好货，等你来拿。 作者丨 邓哲敏 编辑丨 齐铖湧 过去两年，人形机器人赛道的热闹程度不亚于当年的新能源汽车。融资消息此起彼伏，发布会一场接一场，PPT上的参数越写越漂亮，演示视频里的动作越来越流畅。资本、媒体和技术人才都在往这条赛道涌入，行业整体确实向前走了一大步。 但做出来和交出去之间隔着一条工业化的鸿沟。</p><a class="link" href="https://www.leiphone.com/category/ai/egX12nldi7K2aLbu.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article></div></section><section class="section" id="sec4"><div class="sec-head"><h2>研报与数据</h2><span class="chip">6 条</span><span class="idx">04 / 05</span></div><div class="cards"><article class="card reveal wide"><span class="no">01</span><h3>Placer ai：2026年杂货零售增长驱动力报告</h3><div class="meta"><span class="src">199IT</span><span class="dot"></span><span>2026-09-24 04:00</span></div><p>报告显示，线下杂货零售并未因电商渗透和新零售业态扩张而削弱，相反，多元渠道供给增加推动整体购物频次持续提升。消费者开始在批发仓储、折扣店、美元店以及传统超市之间灵活切换，市场竞争也从争夺整篮商品逐渐转向争夺购物清单中的局部需求，行业整体流量因此持续扩容。</p><a class="link" href="http://www.199it.com/archives/1842153.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">02</span><h3>Crunchbase：2026年第二季度亚洲风险投资总额达428亿美元</h3><div class="meta"><span class="src">199IT</span><span class="dot"></span><span>2026-09-24 02:00</span></div><p>第二季度，投资亚洲本土初创企业的资金大幅增长，主要得益于对华企业及人工智能初创公司的融资显著增加。</p><a class="link" href="http://www.199it.com/archives/1840671.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">03</span><h3>英伟达：预期市盈率跌破17倍，2027财年营收净利预计同比增长90%/99%</h3><div class="meta"><span class="src">199IT</span><span class="dot"></span><span>2026-09-23 22:46</span></div><p>7倍，创十多年最低，仅为2025年时一半。TCW经理Eli Horton称市场对盈利可持续性存疑。2027财年营收净利预计增长90%/99%，股价2026年涨22%居科技七巨头第二，但估值与基本面脱节。黄仁勋称其为增长型价值股。</p><a class="link" href="http://www.199it.com/archives/1853860.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">04</span><h3>益普索：2026年73%美国人担心AI防范不足，39%称负面影响环比上升</h3><div class="meta"><span class="src">199IT</span><span class="dot"></span><span>2026-09-23 22:46</span></div><p>路透社/益普索民调显示，约73%的美国人担心AI公司在防止AI造成严重危害方面做得不够。39%的受访者认为AI正对社会产生负面影响，高于上月的36%，为3月以来最高。多数受访者呼吁联邦政府制定AI安全标准；约55%认为放缓AI开发是好事。</p><a class="link" href="http://www.199it.com/archives/1853862.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">05</span><h3>毕马威：2026年全球金融行业AI报告</h3><div class="meta"><span class="src">199IT</span><span class="dot"></span><span>2026-09-23 05:00</span></div><p>金融职能AI应用已进入规模化阶段，财务规划领域AI应用率达到76%，整体AI活跃使用率已由2024年的30%提升至2026年的75%，两年增长超过一倍。</p><a class="link" href="http://www.199it.com/archives/1831532.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">06</span><h3>麦肯锡：2026年消费者报告</h3><div class="meta"><span class="src">199IT</span><span class="dot"></span><span>2026-09-23 05:00</span></div><p>年轻消费者正引领这一转变。28%的Z世代表示他们已经在使用生成式AI工具进行购物（婴儿潮一代为16%），而60%的人表示他们经常使用传统搜索平台顶部的“AI概览”（婴儿潮一代为29%）。</p><a class="link" href="http://www.199it.com/archives/1838596.html" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article></div></section><section class="section" id="sec5"><div class="sec-head"><h2>技巧与观点</h2><span class="chip">8 条</span><span class="idx">05 / 05</span></div><div class="cards"><article class="card reveal wide"><span class="no">01</span><h3>浪潮信息发布元脑HC2000多元算力机组：全液冷设计 单柜可承载256张AIPU</h3><div class="meta"><span class="src">快科技</span><span class="dot"></span><span>2026-09-24 16:20</span></div><p>快科技9月24日消息， 在2026人工智能计算大会（AICC2026）上，浪潮信息正式发布元脑HC2000多元算力机组及元脑SD200 Ultra超节点AI服务器，分别面向容量型智算和能力型智算需求。 据介绍，元脑HC2000采用DirectCom 2.0极速架构，基于高密液冷AI整机柜，并搭载MCIS多元算力协同推理软件栈，可根据不同计算负载匹配和调整算力…</p><a class="link" href="https://news.mydrivers.com/1/1153/1153566.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">02</span><h3>Claude写作能力退化了！工程师解释：模型被训成写给AI看而非给人看</h3><div class="meta"><span class="src">快科技</span><span class="dot"></span><span>2026-09-24 16:14</span></div><p>快科技9月24日消息，大家有没有发现，AI模型在数学、编程和推理能力上进步迅速，但写作水平却有些停滞不前，甚至还有所退步，而Anthropic的Claude同样也存在这一问题。 为何Opus 4.6会成为Anthropic最后一款写作表现出色的模型？</p><a class="link" href="https://news.mydrivers.com/1/1153/1153565.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">03</span><h3>部分涨幅或超50%！半导体12英寸硅片长约价格大涨</h3><div class="meta"><span class="src">快科技</span><span class="dot"></span><span>2026-09-24 15:11</span></div><p>快科技9月24日消息， 随着AI逻辑芯片与存储同步扩产，半导体12英寸硅片供需趋紧，2027年长约涨价趋势逐步确立。 业界调查显示， 12英寸外延片（Epi Wafer）新长约价格预估上涨15%-25%，抛光硅片（Polished Wafer）涨幅或达40%以上，部分二线客户涨幅超过50%，且2028年仍有续涨空间。</p><a class="link" href="https://news.mydrivers.com/1/1153/1153556.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">04</span><h3>嘘！“华为”车现在卖十万块了</h3><div class="meta"><span class="src">快科技</span><span class="dot"></span><span>2026-09-24 08:30</span></div><p>10万块能买什么车？ 三年前，这个预算只能买到一台配置寒酸的合资紧凑型轿车，中控屏是收音机，倒车影像要选装，智驾更是想都不敢想。 2026年9月，你能买到一台搭载华为DriveONE电驱的增程SUV——2027款埃安i60增程版，10.68万元权益价，上市3小时订单突破5000台；</p><a class="link" href="https://news.mydrivers.com/1/1153/1153546.htm" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">05</span><h3>Claude 5.5 发布，性能直逼 Fable，还要卷价格</h3><div class="meta"><span class="src">爱范儿</span><span class="dot"></span><span>2026-09-23 10:25</span></div><p>最卷一夜！ #欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。</p><a class="link" href="https://www.ifanr.com/1681629" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">06</span><h3>刚刚，GPT-6 新模型掀桌！「白菜价」杀进 DeepSeek 腹地</h3><div class="meta"><span class="src">爱范儿</span><span class="dot"></span><span>2026-09-23 10:21</span></div><p>DeepSeek 的价格护城河，迎来 OpenAI 的挑战 #欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。</p><a class="link" href="https://www.ifanr.com/1681605" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">07</span><h3>光帆携手韶音，以 AI OS 破局单点功能内卷</h3><div class="meta"><span class="src">爱范儿</span><span class="dot"></span><span>2026-09-22 18:10</span></div><p>好 AI，不必自己造。 #欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。</p><a class="link" href="https://www.ifanr.com/1681475" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article><article class="card reveal"><span class="no">08</span><h3>千问办公押注的企业上下文，是 Agent 时代的组织语言</h3><div class="meta"><span class="src">爱范儿</span><span class="dot"></span><span>2026-09-22 17:06</span></div><p>给 Agent 一张组织里的工牌 #欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。</p><a class="link" href="https://www.ifanr.com/1681363" target="_blank" rel="noopener noreferrer">阅读全文 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></article></div></section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap foot">
+    <div class="grp">
+      <span>共 <strong>36</strong> 条</span>
+      <span class="dot"></span>
+      <span>5 大板块</span>
+      <span class="dot"></span>
+      <span>2026-09-24 北京时间</span>
+    </div>
+    <span>数据来自 <a href="https://www.qbitai.com/" target="_blank" rel="noopener noreferrer">199IT / IT之家 / InfoQ 中文 / Solidot / 开源中国 / 快科技 等</a></span>
+  </div>
+</footer>
+
+<button class="to-top" type="button" aria-label="回到顶部"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<div class="toast" role="status" aria-live="polite"></div>
+<div class="badge-preview"><span class="dotpy"></span>UI 预览 · 未上线</div>
+
+<script>
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* 回到顶部 */
+  var toTop=document.querySelector('.to-top');
+  if(toTop){
+    window.addEventListener('scroll',function(){
+      toTop.classList.toggle('show',window.scrollY>600);
+    },{passive:true});
+    toTop.addEventListener('click',function(){
+      window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
+    });
+  }
+
+  /* 导航滚动定位 + 高亮 */
+  var links=[].slice.call(document.querySelectorAll('.nav-links a'));
+  links.forEach(function(a){
+    a.addEventListener('click',function(e){
+      var id=a.getAttribute('href');
+      if(!id||id.charAt(0)!=='#')return;
+      var el=document.getElementById(id.slice(1));
+      if(!el)return;
+      e.preventDefault();
+      try{el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});}
+      catch(_){el.scrollIntoView();}
+      history.replaceState(null,'',id);
+    });
+  });
+  var secs=[].slice.call(document.querySelectorAll('section[id]'));
+  function setActive(id){
+    links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+id);});
+  }
+  if('IntersectionObserver' in window&&secs.length){
+    var ob=new IntersectionObserver(function(es){
+      es.forEach(function(en){if(en.isIntersecting)setActive(en.target.id);});
+    },{rootMargin:'-84px 0px -62% 0px',threshold:0});
+    secs.forEach(function(s){ob.observe(s);});
+  }
+
+  /* 卡片入场 */
+  var cards=[].slice.call(document.querySelectorAll('.reveal'));
+  if(!reduce&&'IntersectionObserver' in window){
+    var ob2=new IntersectionObserver(function(es){
+      es.forEach(function(en,i){
+        if(en.isIntersecting){
+          var el=en.target;
+          setTimeout(function(){el.classList.add('in');},Math.min(i*28,160));
+          ob2.unobserve(el);
+        }
+      });
+    },{rootMargin:'0px 0px -8% 0px',threshold:0.04});
+    cards.forEach(function(c){ob2.observe(c);});
+  }else{
+    cards.forEach(function(c){c.classList.add('in');});
+  }
+
+  /* 刷新（预览模式下会优雅降级） */
+  var toast=document.querySelector('.toast');
+  var tTimer=null;
+  function say(msg){
+    if(!toast)return;
+    toast.innerHTML='<span class="dotpy"></span><span></span>';
+    toast.lastChild.textContent=msg;
+    toast.classList.add('show');
+    clearTimeout(tTimer);
+    tTimer=setTimeout(function(){toast.classList.remove('show');},3600);
+  }
+  var busy=false;
+  function refresh(){
+    if(busy){say('正在刷新，请稍候…');return;}
+    busy=true;say('正在抓取最新资讯…');
+    fetch('/api/refresh',{method:'POST'})
+      .then(function(r){return r.json().catch(function(){return{};}).then(function(j){return{s:r.status,j:j};});})
+      .then(function(o){
+        if(o.s===200||o.s===202){say('已开始更新，约 1 分钟后刷新本页');}
+        else if(o.s===429){say('刚刚更新过，请稍后再试');}
+        else{say('更新失败（HTTP '+o.s+'）');}
+      })
+      .catch(function(){say('预览模式：当前是静态文件，未连接服务');})
+      .then(function(){setTimeout(function(){busy=false;},4000);});
+  }
+  [].slice.call(document.querySelectorAll('[data-refresh]')).forEach(function(b){
+    b.addEventListener('click',refresh);
+  });
+})();
+</script>
+</body>
+</html>
