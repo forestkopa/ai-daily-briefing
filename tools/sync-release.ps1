@@ -13,7 +13,7 @@
 #   - vX.Y 标签 = 不可变里程碑（一次创建、永久保留），对应同名 GitHub Release。
 #   - GitHub 的 "Latest" 徽标由 GitHub 自动赋予「最新发布的 release」，无需手动管理。
 #
-# 本机实测踩过的七个坑（2026-09-28 修复，勿回退）：
+# 本机实测踩过的八个坑（2026-09-28 修复，勿回退）：
 #   1) 【致命】push 报 "git: 'remote-https' is not a git command"。
 #      本机 PortableGit 的 mingw64\libexec\git-core 是【空目录】，远程助手
 #      git-remote-https.exe 只存在于 mingw64\bin；而 git 是从 GIT_EXEC_PATH
@@ -53,6 +53,10 @@
 #      违反本文件开头「latest 始终指向当前最大版本号对应的提交」这条约定。
 #      -> 标签已存在时用 `git rev-list -n 1 <tag>` 取【标签自己的提交】，
 #         再拿它去落 latest、写 Release 正文与提交信息。
+#   8) 【假象】走 URL 内联凭据 push 后，refs/remotes/origin/main 不会更新，
+#      `git status` 谎报 "ahead of 'origin/main' by N commits"，
+#      `git log origin/main..HEAD` 把已推的提交又列一遍（实测 ahead 3，而远端早已是 HEAD）。
+#      -> push 成功后用本地 `git update-ref refs/remotes/origin/main <sha>` 修正。
 param(
     [string]$Version = '',  # 形如 v1.1；为空则只推送 main，不动版本号/latest
     [switch]$Force          # 跳过交互确认（仅当用户已明确批准推送后、由脚本/自动化显式传入）
@@ -252,6 +256,19 @@ try {
     $sha = (Invoke-Git rev-parse HEAD).Trim()
     $msg = (Invoke-Git log -1 --pretty=%s).Trim()
     Log "  最新提交 $sha : $msg"
+
+    # 【坑 8】用 URL 内联凭据 push（本机唯一可行通路，见坑 6）时，
+    #   git 只知道「推给了一个 URL」，并不知道它就是 origin，
+    #   于是 refs/remotes/origin/main 【不会】被更新 —— 结果是 `git status` 谎报
+    #   "Your branch is ahead of 'origin/main' by N commits"，
+    #   `git log origin/main..HEAD` 也会把已经推上去的提交又列一遍（实测 ahead 3）。
+    #   这里用本地 update-ref 修正：不联网、不依赖凭据，私有仓库同样安全。
+    #   仅在 push 已 rc=0 成功后才执行，所以 origin/main = 刚推上去的 HEAD 是事实。
+    if ($sha) {
+        try { Invoke-Git update-ref refs/remotes/origin/main $sha } catch {
+            Log "  ⚠ 更新跟踪引用 refs/remotes/origin/main 失败（不影响推送结果）：$(Sanitize $_.Exception.Message)"
+        }
+    }
 
     if ($Version) {
         if ($Version -notmatch '^v\d+\.\d+(\.\d+)?$') { throw "版本号格式应为 vX.Y（如 v1.1），收到: $Version" }

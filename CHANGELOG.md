@@ -124,3 +124,9 @@
     而 `v1.0` 标签在 `9a6a0a7`——违反脚本自己开头的约定「latest 始终指向当前最大版本号对应的提交」。
     → 标签已存在时改用 `git rev-list -n 1 <tag>` 取**标签自己的提交**，再拿它落 latest、
     写 Release 正文与提交信息，保证 `vX.Y` / `latest` / Release 正文三者一致。
+11. **走 URL 内联凭据 push 后 `origin/main` 跟踪引用不更新**：`git status` 谎报
+    `ahead of 'origin/main' by 3 commits`，`git log origin/main..HEAD` 把已经推上去的提交又列一遍
+    （实测本地 `origin/main` 停在 `9a6a0a7`，而远端早已是 `33f4af3`）——
+    根因是一条 URL 形式的 push 不会告诉 git「那就是 origin」。
+    → push 成功后用本地 `git update-ref refs/remotes/origin/main <sha>` 修正：
+    不联网、不依赖凭据，私有仓库同样安全。
